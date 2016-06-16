@@ -1,0 +1,14 @@
+/**
+ * These values will not show up in content, but can be
+ * queried by JavaScript to know which breakpoint is active.
+ * Add or remove as many breakpoints as you like.
+ */
+.site-header:before {
+  content: "mobile";
+  display: none; /* Prevent from displaying. */
+}
+@media (min-width: $mobile-breakpoint) {
+  .site-header:before {
+    content: "desktop";
+  }
+}

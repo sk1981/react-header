@@ -1,0 +1,23 @@
+@import "variables";
+@import "breakpoints";
+@import "mixins";
+@import "headers-slider";
+@import "logo";
+@import "navigation";
+
+/**
+ * Reset
+ */
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  color: #333333;
+  background-color: #efefef;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
