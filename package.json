@@ -11,7 +11,7 @@
     "header",
     "react-component"
   ],
-  "author": "skp1981",
+  "author": "sk1981",
   "license": "MIT",
   "dependencies": {
     "react": "^15.1.0",
