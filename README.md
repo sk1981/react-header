@@ -7,6 +7,9 @@ A responsive, easy to configure react header.
 * Non Mobile version
 * Horizontal Sliders element
 * Composition Elements for Sticky headers
+* Polishing (adding proptypes/comments etc)
 * Cleaning/Refactoring
+* Lint
 * Build
 * Tests
+* Documentation
