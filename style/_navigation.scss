@@ -54,18 +54,25 @@
 
 @include update-link-color(".nav-bar__item-link", #a0a0a0)
 
+@media screen and (min-width: $mobile-breakpoint) {
+  .nav-bar__item-link, .site-navigation__list, .header-slider {
+    display: inline-block;
+  }
 
-//.site-navigation {
-//  display: inline-block;
-//}
-//
-//.site-navigation__list {
-//  list-style: none;
-//  display: inline-block;
-//}
-//
-//
-//.nav-bar__item {
-//  display: inline-block;
-//  padding: 5px 20px;
-//}
+  .nav-bar__item {
+    display: inline-block;
+    padding: 5px 20px;
+  }
+
+  .site-navigation__list--subList {
+    display: none;
+    position: absolute;
+  }
+  .nav-bar__item:hover .site-navigation__list--subList {
+    display: block;
+  }
+
+  .nav-bar__item:hover .nav-bar__item {
+    display: block;
+  }
+}

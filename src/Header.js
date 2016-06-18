@@ -72,11 +72,10 @@ export default class Header extends React.Component  {
   }
 
   render() {
-    const isDesktop = this.state.mode === 'isDesktop';
-
+    const isDesktop = this.state.mode === 'desktop';
     return (
       <header className="site-header">
-        {this.organizeChildren(this.props.children)}
+        {isDesktop ? this.props.children: this.organizeChildren(this.props.children)}
       </header>
     );
   }

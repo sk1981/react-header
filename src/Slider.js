@@ -8,11 +8,11 @@ export default class Slider extends React.Component {
 
   setHeight(sliderElement) {
     this.sliderElement = sliderElement;
-    this.height = this.sliderElement.scrollHeight;
+    this.height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
   }
 
   componentDidUpdate() {
-    this.height = this.sliderElement.scrollHeight;
+    this.height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
     // this.sliderElement
   }
 

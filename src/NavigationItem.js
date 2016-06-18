@@ -9,12 +9,13 @@ const isSubMenu = (children) => {
 };
 
 export default (props) => {
-  const children = isSubMenu(props.children) ? React.cloneElement(props.children, {subMenu: true}) :
-    <a className="nav-bar__item-link" href={props.link}>{props.text}</a>;
+  const navigationLink = <a className="nav-bar__item-link" href={props.link}>{props.text}</a>;
+
 
   return (
     <li className="nav-bar__item">
-      {children}
+      {navigationLink}
+      {isSubMenu(props.children) ? React.cloneElement(props.children, {subMenu: true}): undefined}
     </li>
   );
 };
