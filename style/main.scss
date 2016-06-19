@@ -2,9 +2,9 @@
 @import "breakpoints";
 @import "mixins";
 @import "base";
-
 @import "headers-slider";
 @import "logo";
+@import "sticky-header";
 @import "header";
 @import "navigation";
 
@@ -13,4 +13,5 @@ body {
   color: #333333;
   background-color: #efefef;
   margin: 0;
+  height: 200vh;
 }
