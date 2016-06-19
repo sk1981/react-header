@@ -1,23 +1,16 @@
 @import "variables";
 @import "breakpoints";
 @import "mixins";
+@import "base";
+
 @import "headers-slider";
 @import "logo";
+@import "header";
 @import "navigation";
 
-/**
- * Reset
- */
-*, *:before, *:after {
-  box-sizing: border-box;
-}
-
+//TODO : Move to index html file
 body {
   color: #333333;
   background-color: #efefef;
   margin: 0;
-}
-
-a {
-  text-decoration: none;
 }

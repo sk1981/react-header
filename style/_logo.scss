@@ -2,7 +2,9 @@
  * Logo
  */
 .site-logo {
- color: #F68300;
+ color: $header-logo-color;
  display: inline-block;
- font-size: 30px;
+ font-size: $header-logos-size;
 }
+
+@include update-link-color(".site-logo__link", $header-logo-color);

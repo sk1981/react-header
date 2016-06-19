@@ -1,0 +1,35 @@
+
+/**
+ * Default
+ */
+.site-header {
+  background-color: $header-bg-color;
+  padding: $header-spacing;
+  color: $header-font-color;
+}
+
+/**
+ * Top header in mobile
+ */
+.navbar-toggle {
+  float: right;
+}
+
+.navbar-toggle {
+  font-size: $toggle-icon-size;
+  font-family: $toggle-icon-family;
+}
+
+/**
+ * Navigation Toggle
+ */
+.navbar-toggle::before {
+  content: "\2261";
+  color: $toggle-open-icon-color;
+
+}
+
+.navbar-toggle--open::before {
+  content: "\78";
+  color: $toggle-close-icon-color;
+}
