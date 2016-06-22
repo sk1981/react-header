@@ -3,13 +3,14 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: [
-    './src/index',
-    './style/main.scss'
-  ],
+  entry: {
+    app: ['./src/index', './style/main.scss'],
+    vendor: ['react', 'react-dom']
+  },
   output: {
-    path: __dirname,
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'build'),
+    libraryTarget: 'umd',
+    filename: '[name]-bundle.js'
   },
   module: {
     loaders: [
@@ -21,7 +22,7 @@ module.exports = {
           presets: ['es2015', 'react'],
           plugins: ['transform-es2015-function-name']
         }
-      },,
+      },
       {
         test: /\.scss?$/,
         exclude: /node_modules/,
@@ -30,7 +31,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin("styles.css")
+    new ExtractTextPlugin("[name]-styles.css"),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor'],
+      minChunks: Infinity
+    })
   ]
 }
 
