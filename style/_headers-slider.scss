@@ -1,7 +1,13 @@
 .header-slider {
-  //height: 0;
-  transition: height 500ms;
+  height: auto;
+  transition: transform 500ms;
   overflow: hidden;
+  position: absolute;
+  //bottom: 0;
+  top: 100%;
+  z-index: -1;
+  background-color: $header-bg-color;
+  width: 100%;
   //opacity:0;
   //transform: translateX(-100px);
 }

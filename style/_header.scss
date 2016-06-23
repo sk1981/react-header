@@ -4,8 +4,9 @@
  */
 .site-header {
   background-color: $header-bg-color;
-  padding: $header-spacing;
   color: $header-font-color;
+  position: relative;
+  z-index: 10000;
 }
 
 /**
@@ -13,11 +14,9 @@
  */
 .navbar-toggle {
   float: right;
-}
-
-.navbar-toggle {
   font-size: $toggle-icon-size;
   font-family: $toggle-icon-family;
+  padding: $header-spacing;
 }
 
 /**
@@ -32,4 +31,8 @@
 .navbar-toggle--open::before {
   content: "\78";
   color: $toggle-close-icon-color;
+}
+
+.header-top-bar {
+  z-index: 10000;
 }

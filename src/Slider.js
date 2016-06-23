@@ -3,25 +3,36 @@ import React from 'react';
 export default class Slider extends React.Component {
   constructor(props) {
     super(props);
-    this.setHeight = this.setHeight.bind(this);
+    this.state = {};
+    this.setSliderElement = this.setSliderElement.bind(this);
   }
 
-  setHeight(sliderElement) {
+  getHeight() {
+    const height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
+    this.setState({height: height});
+  }
+
+  setSliderElement(sliderElement) {
     this.sliderElement = sliderElement;
-    this.height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
+    this.getHeight();
   }
 
-  componentDidUpdate() {
-    this.height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
-    // this.sliderElement
+  componentWillReceiveProps(newProps) {
+    if(newProps.draw !== this.props.draw) {
+      this.getHeight();
+    }
   }
 
   render() {
-    console.log("rendering......");
-    const drawSlider = this.props.draw ? 'header-slider--drawn' : '';
-    const sliderHeight = this.props.draw ? `${this.height}px` : '1px';
+    const sliderTransform = this.props.draw === true ? '0' : '-100%';
+
+    const styles = {
+      transform : `translateY(${sliderTransform})`,
+    };
+
+
     return (
-      <div ref={this.setHeight} style={{height: sliderHeight}} className={`header-slider `}>
+      <div ref={this.setSliderElement} style={styles} className="header-slider">
         {this.props.children}
       </div>
     );
