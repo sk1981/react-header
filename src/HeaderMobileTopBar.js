@@ -2,7 +2,7 @@ import React from 'react';
 
 export default (props) => {
   return (
-    <div class="header-top-bar">
+    <div className="header-top-bar">
       {props.children}
     </div>
   );

@@ -3,7 +3,7 @@
  */
 .site-navigation__list {
   list-style: none;
-  padding: 0;
+  padding: $header-spacing;
 }
 
 .site-navigation__list.site-navigation__list--sub {

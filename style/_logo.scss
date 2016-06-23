@@ -5,6 +5,8 @@
  color: $header-logo-color;
  display: inline-block;
  font-size: $header-logos-size;
+ padding: $header-spacing;
+ background-color: $sub-nav-color;
 }
 
 @include update-link-color(".site-logo__link", $header-logo-color);

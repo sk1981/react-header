@@ -1,10 +1,12 @@
 import React from 'react';
 
-export default (props) => {
-  const {subMenu, children} = props;
+const NavigationBar = (props) => {
+  const {isMainMenu, children} = props;
   return (
-    <ul className={`site-navigation__list ${subMenu ? 'site-navigation__list--subList': ''}`}>
+    <ul className={`site-navigation__list ${!isMainMenu ? 'site-navigation__list--sub': ''}`}>
       {children}
     </ul>
   );
-}
+};
+
+export default NavigationBar;

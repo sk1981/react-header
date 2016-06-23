@@ -17,7 +17,7 @@ function getMode() {
 }
 
 /**
- * Top level header element
+ * Top level header element which styles a basic header
  */
 export default class Header extends React.Component  {
 
@@ -25,6 +25,7 @@ export default class Header extends React.Component  {
     super(props);
     this.state = {displayMenu: false};
     this.displayMenu = this.displayMenu.bind(this);
+    this.setDisplayMode = this.setDisplayMode.bind(this);
   }
 
   setDisplayMode() {
@@ -47,27 +48,66 @@ export default class Header extends React.Component  {
     this.setState({displayMenu : !this.state.displayMenu});
   }
 
-  organizeChildren(children) {
-    const newChildren = [];
-    const mobileHeaderTopBarChildren = [];
-    const mobileHeaderTopBar = <HeaderMobileTopBar>{mobileHeaderTopBarChildren}</HeaderMobileTopBar>;
-    newChildren.push(mobileHeaderTopBar);
+  getMainNav(navigationChild) {
+    return <nav className="site-navigation">{React.cloneElement(navigationChild, {isMainMenu: true})}</nav>
+  }
 
+  /**
+   *
+   * Populates the two top level components in mobile view
+   *
+   * @param children
+   * @param mobileHeaderTopBarChildren
+   * @param sliderChildren
+   */
+  populateMobileComponents(children, mobileHeaderTopBarChildren, sliderChildren) {
     children.forEach((child) => {
       if(child.type === Logo) {
         mobileHeaderTopBarChildren.push(child);
       } else if(child.type === NavigationBar) {
-        //TODO : Issue here as we should push all children inside the slider, Also duplicate code
-        newChildren.push(<Slider draw={this.state.displayMenu}><nav className="site-navigation">{child}</nav></Slider>);
+        sliderChildren.push(this.getMainNav(child));
       } else {
-        newChildren.push(<Slider draw={this.state.displayMenu}>{child}</Slider>);
-
+        sliderChildren.push(child);
       }
     });
     mobileHeaderTopBarChildren.push(
-      <NavigationToggle displayMenu={this.state.displayMenu} onMenuToggle={this.displayMenu}>        
+      <NavigationToggle displayMenu={this.state.displayMenu} onMenuToggle={this.displayMenu}>
       </NavigationToggle>
     );
+  }
+
+  /**
+   * Organizes the child is mobile version so that the header components align more
+   * closely with how the element looks on mobile.
+   *
+   * The first component would be the top header bar displaying the brand logo
+   * and icon to close expand the navigation menu.
+   *
+   * Next component would be the slider element which slides open or close the header components.
+   * @param children original array of children
+   * @returns {Array} final arranged array
+   */
+  organizeMobileChildren(children) {
+    const newChildren = [];
+    const mobileHeaderTopBarChildren = [];
+    const sliderChildren = [];
+    const slider = <Slider draw={this.state.displayMenu}>{sliderChildren}</Slider>;
+    newChildren.push(<HeaderMobileTopBar>{mobileHeaderTopBarChildren}</HeaderMobileTopBar>);
+    newChildren.push(slider);
+    this.populateMobileComponents(children, mobileHeaderTopBarChildren, sliderChildren);
+    return newChildren;
+  }
+
+  organizeDesktopChildren(children) {
+    const newChildren = [];
+
+    children.forEach((child) => {
+      if(child.type === NavigationBar) {
+        newChildren.push(this.getMainNav(child));
+      } else {
+        newChildren.push(child);
+      }
+    });
     return newChildren;
   }
 
@@ -75,7 +115,7 @@ export default class Header extends React.Component  {
     const isDesktop = this.state.mode === 'desktop';
     return (
       <header className="site-header">
-        {isDesktop ? this.props.children: this.organizeChildren(this.props.children)}
+        {isDesktop ? this.organizeDesktopChildren(this.props.children): this.organizeMobileChildren(this.props.children)}
       </header>
     );
   }

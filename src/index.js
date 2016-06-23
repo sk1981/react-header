@@ -1,4 +1,6 @@
 import Header from './Header.js';
+import StickyHeader from './StickyHeader.js';
+import StickyOnScrollUpHeader from './StickyOnScrollUpHeader.js'
 import {render} from 'react-dom';
 import React from 'react';
 import Logo from './Logo.js';
@@ -6,7 +8,7 @@ import NavigationBar from './NavigationBar.js';
 import NavigationItem from './NavigationItem.js';
 
 const header = (
-  <Header>
+  <StickyOnScrollUpHeader>
     <Logo title="My Logo" link="http://testing.com"></Logo>
     <NavigationBar>
       <NavigationItem link="#" text="Home"></NavigationItem>
@@ -21,7 +23,7 @@ const header = (
       <NavigationItem link="#" text="Contact"></NavigationItem>
       <NavigationItem link="#" text="About Us"></NavigationItem>
     </NavigationBar>
-  </Header>
+  </StickyOnScrollUpHeader>
 );
 
 render(header, document.getElementById('header'));

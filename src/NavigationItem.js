@@ -1,21 +1,26 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 
-import NavigationBar from './NavigationBar';
+export default class NavigationItem extends React.Component {
 
-const isSubMenu = (children) => {
-  const { count, only } = React.Children;
-  return count(children) === 1 && only(children).type === NavigationBar;
-};
+  constructor(props) {
+    super(props);
+    this.state = {isActive: false};
+    this.toggleActiveStatus = this.toggleActiveStatus.bind(this);
+  }
 
-export default (props) => {
-  const navigationLink = <a className="nav-bar__item-link" href={props.link}>{props.text}</a>;
+  toggleActiveStatus() {
+    this.setState({isActive: !this.state.isActive});
+  }
 
-
-  return (
-    <li className="nav-bar__item">
-      {navigationLink}
-      {isSubMenu(props.children) ? React.cloneElement(props.children, {subMenu: true}): undefined}
-    </li>
-  );
+  render() {
+    const {link, text, children} = this.props;
+    const navigationLink = <a className={`nav-bar__item-link ${children ? 'nav-bar__link-sub' : ''}`} href={link}>{text}</a>;
+    const isActiveClass = this.state.isActive ? 'nav-bar__item--active' : '';
+    return (
+      <li onClick={this.toggleActiveStatus} className={`nav-bar__item ${isActiveClass}`}>
+        {navigationLink}
+        {children}
+      </li>
+    );
+  }
 };
