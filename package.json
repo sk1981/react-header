@@ -4,7 +4,7 @@
   "description": "A responsive header built in react",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -w test/helpers/browserSetup.js test/*.spec.js"
+    "test": "./node_modules/karma/bin/karma start --single-run"
   },
   "keywords": [
     "react",
@@ -32,6 +32,8 @@
     "jsdom": "^9.2.1",
     "karma": "^0.13.22",
     "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
     "karma-mocha": "^1.0.1",
     "karma-mocha-reporter": "^2.0.4",
     "karma-phantomjs-launcher": "^1.0.0",
