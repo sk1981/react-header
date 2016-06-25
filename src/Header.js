@@ -4,7 +4,8 @@ import Logo from './Logo';
 import NavigationToggle from './NavigationToggle';
 import NavigationBar from './NavigationBar';
 
-import Slider from './Slider';
+import VerticalSlider from './Slider';
+import HorizontalSlider from './HorizontalSlider';
 
 
 function getMode() {
@@ -85,9 +86,11 @@ export default class Header extends React.Component  {
    *
    * Next component would be the slider element which slides open or close the header components.
    * @param children original array of children
+   * @param horizontal Should the slider be horizontal or vertical
    * @returns {Array} final arranged array
    */
-  organizeMobileChildren(children) {
+  organizeMobileChildren(children, horizontal = false) {
+    const Slider = horizontal === true ? HorizontalSlider : VerticalSlider;
     const newChildren = [];
     const mobileHeaderTopBarChildren = [];
     const sliderChildren = [];
@@ -115,7 +118,7 @@ export default class Header extends React.Component  {
     const isDesktop = this.state.mode === 'desktop';
     return (
       <header className="site-header">
-        {isDesktop ? this.organizeDesktopChildren(this.props.children): this.organizeMobileChildren(this.props.children)}
+        {isDesktop ? this.organizeDesktopChildren(this.props.children): this.organizeMobileChildren(this.props.children, this.props.horizontal)}
       </header>
     );
   }

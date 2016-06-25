@@ -4,7 +4,7 @@ import Header from './Header.js';
 const StickyHeader = (props) => {
   return (
     <div className="sticky-header">
-      <Header>{props.children}</Header>
+      <Header {...props}>{props.children}</Header>
     </div>
   );
 };

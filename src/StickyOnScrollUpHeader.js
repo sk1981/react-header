@@ -44,7 +44,7 @@ export default class StickyOnScrollUpHeader extends React.Component{
 
     return (
       <div ref={this.setHeader} className={`sticky-scrollup-header ${isSticky ? 'sticky-header' : ''}`}>
-        <Header>{this.props.children}</Header>
+        <Header {...this.props}>{this.props.children}</Header>
       </div>
     );
   }
