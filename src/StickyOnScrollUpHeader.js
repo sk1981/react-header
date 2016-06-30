@@ -13,20 +13,19 @@ export default class StickyOnScrollUpHeader extends React.Component{
 
   setHeader(header) {
     this.header = header;
-    console.log("------", header);
   }
 
   setupScrollListener() {
     // const currentScrollTop = window.pageYOffset || documentElement.scrollTop || body.scrollTop || 0;
     const headerHeight = this.header.clientHeight;
-    console.log("header height ---" + headerHeight);
     const currentScrollTop = window.pageYOffset || 0;
     const direction = (currentScrollTop - this.state.scrollTop) > 0 ? 'DOWN': 'UP';
     const isHeaderVisible = headerHeight > currentScrollTop;
     this.setState({
       direction: direction,
       scrollTop: currentScrollTop,
-      isHeaderVisible: isHeaderVisible
+      isHeaderVisible: isHeaderVisible,
+      headerHeight: headerHeight
     })
   }
 
@@ -39,12 +38,15 @@ export default class StickyOnScrollUpHeader extends React.Component{
   }
 
   render() {
-
-    const isSticky = this.state.direction === 'UP';
-
+    const {direction, isHeaderVisible, headerHeight} = this.state;
+    const isStickyClass = direction === 'UP' ? 'sticky-header' : '';
+    // Header should be moved up when it's not visible, so that it can be animated
+    const style = {
+      transform: `translateY(-${isHeaderVisible || direction === 'UP' ? '0': headerHeight}px)`
+    };
     return (
-      <div ref={this.setHeader} className={`sticky-scrollup-header ${isSticky ? 'sticky-header' : ''}`}>
-        <Header {...this.props}>{this.props.children}</Header>
+      <div ref={this.setHeader} style={style} className={`sticky-scrollup-header ${isStickyClass}`}>
+        <Header {...this.props}></Header>
       </div>
     );
   }
