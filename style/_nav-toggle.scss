@@ -1,0 +1,45 @@
+/**
+ * Mixin to create menu blocks from the given html element
+ */
+
+@mixin create-menu-bars($width, $height) {
+  display: inline-block;
+  width: $width;
+  height: $height;
+  background-color: $toggle-close-icon-color;
+  border-radius: $height/2;
+  transition: all 0.3s;
+}
+
+.navbar-toggle {
+  float: right;
+  margin: 10px;
+  position:relative;
+  @include create-menu-bars(30px, 4px);
+  &:before, &:after {
+    @include create-menu-bars(30px, 4px);
+    position:absolute;
+    content: "";
+  }
+  &:before {
+    top: 10px;
+  }
+  &:after {
+    top: 20px;
+  }
+}
+
+
+.navbar-toggle--open {
+  height:0;
+  background-color: $toggle-open-icon-color;
+  &:before {
+    transform:rotateZ(45deg);
+    top: 15px;
+  }
+
+  &:after {
+    transform:rotateZ(-45deg);
+    top: 15px;
+  }
+}

@@ -9,30 +9,6 @@
   z-index: 10000;
 }
 
-/**
- * Top header in mobile
- */
-.navbar-toggle {
-  float: right;
-  font-size: $toggle-icon-size;
-  font-family: $toggle-icon-family;
-  padding: $header-spacing;
-}
-
-/**
- * Navigation Toggle
- */
-.navbar-toggle::before {
-  content: "\2261";
-  color: $toggle-open-icon-color;
-
-}
-
-.navbar-toggle--open::before {
-  content: "\78";
-  color: $toggle-close-icon-color;
-}
-
 .header-top-bar {
   z-index: 10000;
 }
