@@ -117,7 +117,7 @@ export default class Header extends React.Component  {
   render() {
     const isDesktop = this.state.mode === 'desktop';
     return (
-      <header className="site-header">
+      <header className={`site-header ${this.props.horizontal ? 'site-header--hmenu' : 'site-header--vmenu'}`}>
         {isDesktop ? this.organizeDesktopChildren(this.props.children): this.organizeMobileChildren(this.props.children, this.props.horizontal)}
       </header>
     );

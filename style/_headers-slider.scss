@@ -1,14 +1,14 @@
 .header-slider {
   height: auto;
-  transition: transform 500ms;
+  transition: all 500ms;
   overflow: hidden;
-  position: absolute;
-  //bottom: 0;
-  top: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
   z-index: -1;
-  background-color: $header-bg-color;
-  width: 100%;
-  //opacity:0;
-  //transform: translateX(-100px);
+  background-color: #363d45;
+  width: 75vw;
+  //TODO: Make a variable or calculate
+  margin-top: 44px;
 }
 

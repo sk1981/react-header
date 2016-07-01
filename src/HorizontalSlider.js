@@ -26,13 +26,15 @@ export default class HorizontalSlider extends React.Component {
   render() {
     const sliderTransform = this.props.draw === true ? '0' : '-100%';
 
+    // const styles = {
+    //   transform : `translateX(${sliderTransform})`,
+    // };
     const styles = {
-      transform : `translateX(${sliderTransform})`,
+      left : sliderTransform,
     };
 
-
     return (
-      <div ref={this.setSliderElement} style={styles} className="header-slider">
+      <div ref={this.setSliderElement} style={styles} className="header-slider header-slider--horizontal">
         {this.props.children}
       </div>
     );

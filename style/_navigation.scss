@@ -23,7 +23,24 @@
   display: inline-block;
   padding-left: 10px;
   color: inherit;
+  float: right;
 }
+
+.header-slider--horizontal {
+  .nav-bar__link-sub:after {
+    content: "\25BA";
+  }
+}
+
+
+.site-header--hmenu .nav-bar__item--active .site-navigation__list--sub {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+}
+
 
 .nav-bar__item {
   padding: $nav-item-spacing;
