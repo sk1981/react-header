@@ -94,10 +94,10 @@ export default class Header extends React.Component  {
     const newChildren = [];
     const mobileHeaderTopBarChildren = [];
     const sliderChildren = [];
+    this.populateMobileComponents(children, mobileHeaderTopBarChildren, sliderChildren);
     const slider = <Slider draw={this.state.displayMenu}>{sliderChildren}</Slider>;
     newChildren.push(<HeaderMobileTopBar>{mobileHeaderTopBarChildren}</HeaderMobileTopBar>);
     newChildren.push(slider);
-    this.populateMobileComponents(children, mobileHeaderTopBarChildren, sliderChildren);
     return newChildren;
   }
 
@@ -118,7 +118,7 @@ export default class Header extends React.Component  {
     const isDesktop = this.state.mode === 'desktop';
     return (
       <header className={`site-header ${this.props.horizontal ? 'site-header--hmenu' : 'site-header--vmenu'}`}>
-        {isDesktop ? this.organizeDesktopChildren(this.props.children): this.organizeMobileChildren(this.props.children, this.props.horizontal)}
+        {isDesktop ? this.organizeDesktopChildren(this.props.children): this.organizeMobileChildren(React.Children.toArray(this.props.children), this.props.horizontal)}
       </header>
     );
   }
