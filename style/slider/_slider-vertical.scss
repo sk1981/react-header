@@ -1,0 +1,5 @@
+.vertical-slider--children {
+  transition: transform 0.5s, top 0.2s;
+  position: fixed;
+  background-color: $header-bg-color;
+}

@@ -5,15 +5,22 @@
 $mobile-breakpoint: 600px;
 
 /**
+ *  All zindexes-used
+ */
+// High zindex for header as it should be on the top
+$header-z-index: 10000;
+
+/**
  * Header variables
  */
+$header-height: 60px;
 // background color for header
 $header-bg-color: #363d45;
 // Default color for header components
 $header-font-color: #d1d1d1;
 // Spacing around headers
 $header-spacing-hz: 10px;
-$header-spacing-vt: 5px;
+$header-spacing-vt: 0;
 $header-spacing: $header-spacing-vt $header-spacing-hz;
 
 /**
@@ -37,10 +44,13 @@ $toggle-icon-family: sans-serif;
 /**
  * Navigation related CSS properties
  */
-$nav-item-spacing-hz: 2px;
+$nav-item-spacing-hz: 20px;
 $nav-item-spacing-vt: 10px;
 $nav-item-spacing: $nav-item-spacing-vt $nav-item-spacing-hz;
 $nav-item-color: $header-font-color;
 
-$sub-nav-color: $header-bg-color;
-$sub-nav-shadow-color: #333
+
+$sub-nav-bg-color: $header-bg-color;
+$sub-nav-shadow-color: #333;
+$sub-nav-item-hover-color: darken($nav-item-color, 20);
+$sub-nav-item-hover-bg-color: lighten($sub-nav-bg-color, 20);

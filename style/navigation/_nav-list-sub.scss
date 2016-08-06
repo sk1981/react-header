@@ -1,0 +1,16 @@
+// Rules for sub dropdown list
+.site-nav__list--sub {
+  padding: 5px 10px;
+  background-color: $sub-nav-bg-color;
+  box-shadow: 2px 2px 2px $sub-nav-shadow-color;
+  border-radius: 2px;
+
+  // Any item inside sub list
+  .site-nav__item {
+    display: block;
+    &:hover {
+      color: $sub-nav-item-hover-color;
+      background-color: $sub-nav-item-hover-bg-color;
+    }
+  }
+}

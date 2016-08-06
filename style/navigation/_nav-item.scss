@@ -1,0 +1,8 @@
+.site-nav__item {
+  padding: $nav-item-spacing;
+
+  // Desktop mode rules
+  @media screen and (min-width: $mobile-breakpoint) {
+    display: inline-block;
+  }
+}

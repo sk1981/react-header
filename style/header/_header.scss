@@ -1,4 +1,3 @@
-
 /**
  * Default
  */
@@ -7,6 +6,7 @@
   color: $header-font-color;
   position: relative;
   z-index: 10000;
+  height: $header-height;
 }
 
 .header-top-bar {

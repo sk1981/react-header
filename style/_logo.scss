@@ -2,11 +2,15 @@
  * Logo
  */
 .site-logo {
- color: $header-logo-color;
- display: inline-block;
- font-size: $header-logos-size;
- padding: $header-spacing;
- background-color: $sub-nav-color;
+  color: $header-logo-color;
+  display: inline-block;
+  font-size: $header-logos-size;
+  padding: $header-spacing;
+  background-color: $header-bg-color;
+  // Give same height and line height so that the
+  // items are aligned in the center
+  height: $header-height;
+  line-height: $header-height;
 }
 
 @include update-link-color(".site-logo__link", $header-logo-color);

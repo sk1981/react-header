@@ -1,0 +1,9 @@
+@import "nav-item";
+@import "nav-list";
+@import "nav-list-sub";
+
+.site-navigation {
+  @media screen and (min-width: $mobile-breakpoint) {
+    display: inline-block;
+  }
+}
