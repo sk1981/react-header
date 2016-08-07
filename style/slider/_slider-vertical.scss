@@ -3,3 +3,17 @@
   position: fixed;
   background-color: $header-bg-color;
 }
+
+.vertical-slider__back {
+  padding: 10px 30px;
+}
+
+.vertical-slider__back:before,
+.vertical-slider__title:before {
+    content: "‹";
+    display:inline-block;
+    height:20px;
+    width: 0;
+    position: relative;
+    left: -20px;
+  }

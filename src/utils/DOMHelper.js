@@ -21,7 +21,7 @@ export default {
    * Get visible height of the element
    *
    * @param elementClass
-   * @returns {{height: number, width: number}}
+   * @returns {number}
    */
   getElementVisibleHeight(elementClass) {
     const element = document.getElementsByClassName(elementClass);
@@ -30,9 +30,7 @@ export default {
     }
     const boundingBox = element[0].getBoundingClientRect();
     // As header is on the top, to find visible height just add any negative "top" value to get header height
-    const visibleHeight = Math.max(boundingBox.height + boundingBox.top, 0);
-    console.log(visibleHeight);
     // AS react is > IE8, these properties will always be present
-    return visibleHeight;
+    return Math.max(boundingBox.height + boundingBox.top, 0);
   }
 }

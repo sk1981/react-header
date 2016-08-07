@@ -2,8 +2,7 @@
   display: none;
   transition: transform 0.5s;
   position: absolute;
-  //TODO : Replace 20px with actual margin values
-  top: calc(100% + 20px);
+  top: 100%;
   // Display the children when the slider is drawn
   .dropdown-slider--drawn & {
     display: block;

@@ -1,9 +1,11 @@
 // Rules for sub dropdown list
 .site-nav__list--sub {
-  padding: 5px 10px;
   background-color: $sub-nav-bg-color;
-  box-shadow: 2px 2px 2px $sub-nav-shadow-color;
-  border-radius: 2px;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    box-shadow: 2px 2px 2px $sub-nav-shadow-color;
+    border-radius: 2px;
+  }
 
   // Any item inside sub list
   .site-nav__item {

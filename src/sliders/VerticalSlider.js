@@ -27,7 +27,7 @@ export default class VerticalSlider extends React.Component {
         </div>
       );
     } else {
-      return <div onClick={this.drawSlider}>{this.props.title}</div>;
+      return <div className="vertical-slider__title" onClick={this.drawSlider}>{this.props.title}</div>;
     }
   }
 
@@ -39,6 +39,14 @@ export default class VerticalSlider extends React.Component {
     this.setState({
       draw: !this.state.draw
     });
+  }
+
+  getSliderChild(isSubSlider, children) {
+    if(isSubSlider) {
+      return [<div onClick={this.drawSlider} className="vertical-slider__back">Back</div>].concat(children)
+    } else {
+      return children;
+    }
   }
 
   /**
@@ -58,23 +66,22 @@ export default class VerticalSlider extends React.Component {
    */
   render() {
     const isDrawn = this.state.draw;
-    const sliderTransform = this.state.draw === true ? '0' : '-100%';
-    const drawnClass = this.state.draw ? 'vertical-slider--drawn' : '';
-    const width = this.props.windowWidth / 2;
+    const {isSubSlider, headerHeight, windowWidth, windowHeight} = this.props;
+    const drawnClass = isDrawn ? 'vertical-slider--drawn' : '';
+    const width = windowWidth / 2;
     const childStyles = {
       transform: `translateX(${isDrawn ? '0' : `-${width}px`})`,
-      height: `${this.props.windowHeight - this.props.headerHeight}px`,
+      height: `${windowHeight - headerHeight}px`,
       width: `${width}px`,
-      top: this.props.isSubSlider ? 0: `${this.props.headerHeight}px` ,
+      top: isSubSlider ? 0: `${headerHeight}px` ,
       left: 0,
-      position: this.props.isSubSlider ? 'absolute' : 'fixed'
+      position: isSubSlider ? 'absolute' : 'fixed'
     };
-
 
     return (
       <div ref={this.setSliderElement} className={`vertical-slider ${drawnClass}`}>
         {this.getTopBar()}
-        <div style={childStyles} className="vertical-slider--children">{this.props.children}</div>
+        <div style={childStyles} className="vertical-slider--children">{this.getSliderChild(isSubSlider, this.props.children)}</div>
       </div>
     );
   }

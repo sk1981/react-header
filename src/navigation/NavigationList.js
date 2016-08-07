@@ -2,7 +2,6 @@ import React from 'react';
 import ReactHelper from '../utils/ReactHelper';
 
 const NavigationList = (props) => {
-  console.log("props", props);
   const {isMainMenu, children, windowWidth, windowHeight, mode, headerHeight} = props;
 
   const childProps = {windowWidth, windowHeight, mode, headerHeight };

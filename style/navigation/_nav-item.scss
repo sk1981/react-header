@@ -1,8 +1,11 @@
 .site-nav__item {
   padding: $nav-item-spacing;
+  border-bottom: 1px solid $nav-item-border-color;
+  @include hand-pointer();
 
   // Desktop mode rules
   @media screen and (min-width: $mobile-breakpoint) {
     display: inline-block;
+    border:none;
   }
 }

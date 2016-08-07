@@ -5,3 +5,8 @@
     }
   }
 }
+
+@mixin hand-pointer() {
+  cursor: pointer;
+  cursor: hand;
+}
