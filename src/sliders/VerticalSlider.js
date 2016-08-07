@@ -43,7 +43,7 @@ export default class VerticalSlider extends React.Component {
 
   getSliderChild(isSubSlider, children) {
     if(isSubSlider) {
-      return [<div onClick={this.drawSlider} className="vertical-slider__back">Back</div>].concat(children)
+      return [<div key="back" onClick={this.drawSlider} className="vertical-slider__back">Back</div>].concat(children)
     } else {
       return children;
     }

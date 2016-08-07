@@ -16,13 +16,13 @@ function getMainNav(navigationChild, sizeProps) {
     sizeProps.isMainMenu = true;
     navListProps = sizeProps;
   }
-  return <nav className="site-navigation">{React.cloneElement(navigationChild, navListProps)}</nav>
+  return <nav key="nav" className="site-navigation">{React.cloneElement(navigationChild, navListProps)}</nav>
 }
 
 
 function getChildComponents(childArray, sizeProps) {
   return childArray.filter(child => child.type !== Logo)
-    .map(child => child.type === NavigationList ? getMainNav(child, sizeProps) : child);
+    .map((child, index) => child.type === NavigationList ? getMainNav(child, sizeProps) : React.createElement(child, {key: index}));
 }
 
 /**
