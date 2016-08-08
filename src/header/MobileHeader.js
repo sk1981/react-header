@@ -22,7 +22,7 @@ function getMainNav(navigationChild, sizeProps) {
 
 function getChildComponents(childArray, sizeProps) {
   return childArray.filter(child => child.type !== Logo)
-    .map((child, index) => child.type === NavigationList ? getMainNav(child, sizeProps) : React.createElement(child, {key: index}));
+    .map((child, index) => child.type === NavigationList ? getMainNav(child, sizeProps) : React.cloneElement(child, {key: index}));
 }
 
 /**

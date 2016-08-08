@@ -8,6 +8,10 @@ export default class DropdownSlider extends React.Component {
     this.drawSlider = this.drawSlider.bind(this);
   }
 
+  focus() {
+    this.titleElement.focus();
+  }
+
   getHeight() {
     const height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
   }
@@ -33,7 +37,7 @@ export default class DropdownSlider extends React.Component {
 
     return (
       <div onClick={this.drawSlider} ref={this.setSliderElement}className={`dropdown-slider ${drawnClass}`}>
-        <div>{this.props.title}</div>
+        <div ref={(ref) => this.titleElement = ref} tabIndex="0">{this.props.title}</div>
         <div  style={styles} className="dropdown-slider--children">{this.props.children}</div>
       </div>
     );
