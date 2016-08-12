@@ -11,10 +11,13 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'build'),
     libraryTarget: 'umd',
-    filename: '[name]-bundle.js',
-    publicPath: 'http://localhost:7700/dist'
+    filename: '[name]-bundle.js'
+    // publicPath: 'http://localhost:7700/dist'
   },
   module: {
+    preLoaders: [
+      { test: /\.js?$/, loader: 'eslint', exclude: /node_modules/ }
+    ],
     loaders: [
       {
         test: /.js?$/,
@@ -35,6 +38,11 @@ module.exports = {
   postcss: [
     autoprefixer({browsers: ['last 3 versions']})
   ],
+  eslint: {
+    failOnWarning: false,
+    failOnError: true,
+    configFile: '.eslintrc'
+  },
   plugins: [
     new ExtractTextPlugin("[name]-styles.css")
   ]

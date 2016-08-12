@@ -14,6 +14,7 @@
   "author": "sk1981",
   "license": "MIT",
   "dependencies": {
+    "eslint-plugin-react": "^6.0.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0"
   },
@@ -27,6 +28,8 @@
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "enzyme": "^2.3.0",
+    "eslint": "^3.2.2",
+    "eslint-loader": "^1.5.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "gulp": "^3.9.1",
     "jsdom": "^9.2.1",
