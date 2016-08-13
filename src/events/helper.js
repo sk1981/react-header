@@ -39,7 +39,7 @@ export function debounce(func, wait, immediate){
         context = args = null;
       }
     }
-  };
+  }
 
   var debounced = function(){
     context = this;
@@ -63,4 +63,4 @@ export function debounce(func, wait, immediate){
   };
 
   return debounced;
-};
+}

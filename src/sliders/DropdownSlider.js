@@ -13,7 +13,7 @@ export default class DropdownSlider extends React.Component {
   }
 
   getHeight() {
-    const height = this.sliderElement ? this.sliderElement.scrollHeight: 0;
+    return this.sliderElement ? this.sliderElement.scrollHeight: 0;
   }
 
   setSliderElement(sliderElement) {

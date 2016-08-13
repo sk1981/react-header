@@ -1,4 +1,5 @@
 {
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "env": {
     "es6": true,
     "browser": true,
@@ -13,5 +14,10 @@
   },
   "plugins": [
     "react"
-  ]
+  ],
+  "rules": {
+    "react/jsx-uses-vars": 1,
+    "react/jsx-uses-react": 2,
+    "react/prop-types": 0
+  }
 }

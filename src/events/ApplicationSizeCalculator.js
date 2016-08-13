@@ -11,8 +11,6 @@ export default class ApplicationSizeCalculator extends React.Component {
   }
 
   calculateAppDimensions() {
-    const windowHeight = window.innerHeight;
-    const windowWidth = window.innerWidth;
     const headerHeight = DOMHelper.getElementVisibleHeight('site-header');
     this.setState({
       windowHeight: window.innerHeight,

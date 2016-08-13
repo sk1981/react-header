@@ -14,11 +14,11 @@
   "author": "sk1981",
   "license": "MIT",
   "dependencies": {
-    "eslint-plugin-react": "^6.0.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0"
   },
   "devDependencies": {
+    "eslint-plugin-react": "^6.0.0",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
