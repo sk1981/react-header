@@ -1,19 +1,38 @@
 import React from 'react';
 import DropdownSlider from '../sliders/DropdownSlider';
 import VerticalSlider from '../sliders/VerticalSlider';
+import KeyEvents from '../events/KeyEvents';
 
 export default class NavigationItem extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {displayChild: false};
     this.handleKey = this.handleKey.bind(this);
+    this.dropdownClicked = this.dropdownClicked.bind(this);
   }
 
   handleKey(keyEvent) {
     const keyCode = keyEvent.which;
-    if(this.props.onKeyEvent ) {
+    const codes = KeyEvents.CODE;
+    // handle child keyboard navigation keyevents only if children are present
+    if((this.props.children) &&
+      (codes.DOWN === keyCode || codes.UP === keyCode || codes.ESCAPE === keyCode)) {
+      // Prevent default so page does not moves down
+      keyEvent.preventDefault();
+      this.setState({
+        // do not display if up or escape key is present, display otherwise
+        displayChild: !(codes.UP === keyCode || codes.ESCAPE === keyCode)
+      });
+    } else if(this.props.onKeyEvent ) {
       this.props.onKeyEvent(this.props.index, keyCode);
     }
+  }
+
+  dropdownClicked() {
+    this.setState({
+      displayChild: !this.state.displayChild
+    });
   }
 
   getSubMenuElement(children, props) {
@@ -25,7 +44,7 @@ export default class NavigationItem extends React.Component {
                              isSubSlider={true}
                              title={props.text}>{children}</VerticalSlider>;
     } else {
-      return (<DropdownSlider ref={(ref) => this.subMenuElement = ref} title={props.text}>{children}</DropdownSlider>);
+      return (<DropdownSlider handleClick={this.dropdownClicked} draw={this.state.displayChild} ref={(ref) => this.subMenuElement = ref} title={props.text}>{children}</DropdownSlider>);
     }
   }
 

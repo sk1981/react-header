@@ -12,25 +12,25 @@ export default class NavigationList extends React.Component {
   }
 
   handleKeyEvent(index, keyCode) {
+    // Note that here were are not taking next index from state but from the argument
+    // To use state, we would need to ensure that the state value is tracked properly and
+    // our component is notified of any focus/blur events caused due to clicks outside
     let newActiveIndex = -1;
-    const currentActiveIndex = this.state.activeIndex;
     if(KeyEvents.CODE.LEFT === keyCode) {
-      newActiveIndex = currentActiveIndex - 1;
+      newActiveIndex = index - 1;
     } else if (KeyEvents.CODE.RIGHT === keyCode) {
-      newActiveIndex = currentActiveIndex + 1;
+      newActiveIndex = index + 1;
     }
     if(newActiveIndex > -1 && newActiveIndex < this.props.children.length) {
       this.setState({
         activeIndex: newActiveIndex
       });
     }
-
   }
 
   render() {
     const {isMainMenu, children, windowWidth, windowHeight, mode, headerHeight} = this.props;
     const activeIndex = this.state.activeIndex;
-    console.log("new index", this.state.activeIndex);
     const childProps = {windowWidth, windowHeight, activeIndex, mode, headerHeight, onKeyEvent: this.handleKeyEvent};
     return (
       <ul className={`site-nav__list ${!isMainMenu ? 'site-nav__list--sub': ''}`}>
