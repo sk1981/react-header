@@ -51,8 +51,7 @@ $nav-item-color: $header-font-color;
 $nav-item-outline: $nav-item-color;
 $nav-item-border-color: $nav-item-color;
 
-
 $sub-nav-bg-color: $header-bg-color;
-$sub-nav-shadow-color: #333;
+$sub-nav-shadow-color: #333333;
 $sub-nav-item-hover-color: darken($nav-item-color, 20);
 $sub-nav-item-hover-bg-color: lighten($sub-nav-bg-color, 20);

@@ -22,34 +22,38 @@ $slider-bar-spacing: 10px;
 
 .slider-toggle {
   margin: 10px;
-  position:relative;
+  position: relative;
+
   @include create-menu-bars($slider-width, $slider-height);
-  &:before, &:after {
+
+  &::before,
+  &::after {
     @include create-menu-bars($slider-width, $slider-height);
-    position:absolute;
+
+    position: absolute;
     content: "";
   }
-  &:before {
+
+  &::before {
     top: $slider-bar-spacing;
   }
   // Double the top for the last entry
-  &:after {
+  &::after {
     top: 2 * $slider-bar-spacing;
   }
 }
 
-
 .slider-toggle--open {
-  height:0;
+  height: 0;
   background-color: $toggle-open-icon-color;
   // new top is half od spacing as now we move up both the bars partially
-  &:before {
-    transform:rotateZ(45deg);
+  &::before {
+    transform: rotateZ(45deg);
     top: $slider-bar-spacing/2;
   }
 
-  &:after {
-    transform:rotateZ(-45deg);
+  &::after {
+    transform: rotateZ(-45deg);
     top: $slider-bar-spacing/2;
   }
 }

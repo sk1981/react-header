@@ -1,7 +1,8 @@
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -44,7 +45,11 @@ module.exports = {
     configFile: '.eslintrc'
   },
   plugins: [
-    new ExtractTextPlugin("[name]-styles.css")
+    new ExtractTextPlugin("[name]-styles.css"),
+    new StyleLintPlugin({
+      failOnError: false,
+      syntax: 'scss'
+    })
   ]
 };
 

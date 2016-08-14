@@ -10,6 +10,7 @@
   // Any item inside sub list
   .site-nav__item {
     display: block;
+
     &:hover {
       color: $sub-nav-item-hover-color;
       background-color: $sub-nav-item-hover-bg-color;
