@@ -50,13 +50,11 @@ const MobileHeader = (props) => {
   };
   const childComponents = getChildComponents(childArray, sizeProps);
   return (
-    <header className={`site-header ${props.horizontal ? 'site-header--hmenu' : 'site-header--vmenu'}`}>
       <VerticalSlider mode={props.mode}
                       {...sizeProps}
                       titleComponent={titleComponent}>
         {childComponents}
       </VerticalSlider>
-    </header>
   );
 };
 

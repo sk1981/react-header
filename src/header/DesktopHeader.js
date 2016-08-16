@@ -26,9 +26,9 @@ function organizeDesktopChildren(children) {
 
 const DesktopHeader = (props) => {
   return (
-    <header className="site-header">
+    <div>
       {organizeDesktopChildren(props.children)}
-    </header>
+    </div>
   );
 };
 
