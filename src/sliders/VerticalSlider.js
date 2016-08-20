@@ -19,15 +19,17 @@ export default class VerticalSlider extends React.Component {
    * @returns {XML}
    */
   getTopBar() {
+    const {draw} = this.state;
+
     if (this.props.titleComponent !== undefined) {
       return (
         <div className="vertical-slider__top">
           {this.props.titleComponent}
-          <SliderToggle toggleOpen={this.state.draw} onSliderToggle={this.drawSlider}/>
+          <SliderToggle toggleOpen={draw} onSliderToggle={this.drawSlider}/>
         </div>
       );
     } else {
-      return <div className="vertical-slider__title" onClick={this.drawSlider}>{this.props.title}</div>;
+      return <div aria-haspopup="true" aria-pressed={`${draw}`} aria-expanded={`${draw}`} role="button" className="vertical-slider__title" onClick={this.drawSlider}>{this.props.title}</div>;
     }
   }
 
@@ -81,7 +83,7 @@ export default class VerticalSlider extends React.Component {
     return (
       <div ref={this.setSliderElement} className={`vertical-slider ${drawnClass}`}>
         {this.getTopBar()}
-        <div style={childStyles} className="vertical-slider--children">{this.getSliderChild(isSubSlider, this.props.children)}</div>
+        <div aria-hidden={!isDrawn} style={childStyles} className="vertical-slider--children">{this.getSliderChild(isSubSlider, this.props.children)}</div>
       </div>
     );
   }

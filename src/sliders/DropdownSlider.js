@@ -33,14 +33,15 @@ export default class DropdownSlider extends React.Component {
   }
 
   render() {
-    const sliderTransform = this.props.draw === true ? '0' : '-100%';
-    const drawnClass = this.props.draw ? 'dropdown-slider--drawn': '';
+    const {draw} = this.props;
+    const sliderTransform = draw === true ? '0' : '-100%';
+    const drawnClass = draw ? 'dropdown-slider--drawn': '';
     const styles = {
       transform : `translateY(${sliderTransform})`
     };
 
     return (
-      <div onClick={this.drawSlider} ref={this.setSliderElement}className={`dropdown-slider ${drawnClass}`}>
+      <div role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`} aria-haspopup="true" onClick={this.drawSlider} ref={this.setSliderElement}className={`dropdown-slider ${drawnClass}`}>
         <div ref={(ref) => this.titleElement = ref} tabIndex="0">
           {this.props.title}
           <span className="dropdown-slider--caret"/>

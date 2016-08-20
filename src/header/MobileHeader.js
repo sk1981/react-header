@@ -16,7 +16,7 @@ function getMainNav(navigationChild, sizeProps) {
     sizeProps.isMainMenu = true;
     navListProps = sizeProps;
   }
-  return <nav key="nav" className="site-navigation">{React.cloneElement(navigationChild, navListProps)}</nav>
+  return <nav  role="navigation" key="nav" className="site-navigation">{React.cloneElement(navigationChild, navListProps)}</nav>
 }
 
 

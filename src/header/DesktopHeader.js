@@ -3,7 +3,7 @@ import NavigationList from '../navigation/NavigationList';
 
 
 function getMainNav(navigationChild) {
-  return <nav key="nav" className="site-navigation">{React.cloneElement(navigationChild, {isMainMenu: true})}</nav>
+  return <nav  role="navigation" key="nav" className="site-navigation">{React.cloneElement(navigationChild, {isMainMenu: true})}</nav>
 }
 
 /**
