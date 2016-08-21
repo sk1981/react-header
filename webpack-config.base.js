@@ -6,14 +6,13 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: ['./src/index', './style/main.scss'],
-    vendor: ['react', 'react-dom']
+    app: ['./src/index', './style/main.scss']
   },
   output: {
     path: path.join(__dirname, 'build'),
     libraryTarget: 'umd',
-    filename: '[name]-bundle.js'
-    // publicPath: 'http://localhost:7700/dist'
+    filename: '[name]-bundle.js',
+    library: 'ReactHeader'
   },
   module: {
     preLoaders: [
