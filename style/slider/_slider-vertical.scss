@@ -4,11 +4,6 @@
   background-color: $header-bg-color;
 }
 
-.vertical-slider__back {
-  padding: 10px 30px;
-}
-
-.vertical-slider__back::before,
 .vertical-slider__title::before {
   content: "‹";
   display: inline-block;
@@ -16,4 +11,18 @@
   width: 0;
   position: relative;
   left: -20px;
+}
+
+.vertical-slider__back::before {
+  content: "\203A";
+  display: inline-block;
+  height: 20px;
+  width: 0;
+  position: relative;
+  right: -100%;
+}
+
+// Add box shadow for main slider only when the slider is drawn
+.vertical-slider--main.vertical-slider--drawn > .vertical-slider--children {
+  box-shadow: 6px 0 #a5a5a5;
 }

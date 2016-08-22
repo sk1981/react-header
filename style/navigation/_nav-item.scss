@@ -1,5 +1,4 @@
 .site-nav__item {
-  padding: $nav-item-spacing;
   border-bottom: 1px solid $nav-item-border-color;
 
   @include hand-pointer();
@@ -9,4 +8,16 @@
     display: inline-block;
     border: none;
   }
+}
+
+.site-nav__item-link {
+  padding: $nav-item-spacing;
+  display: inline-block;
+}
+
+// Ensure that dropdown title also follows the above padding details
+.vertical-slider__back,
+.dropdown-slider__title,
+.vertical-slider__title {
+  padding: $nav-item-spacing;
 }

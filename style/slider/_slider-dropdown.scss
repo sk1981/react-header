@@ -9,14 +9,10 @@
   }
 }
 
+// Class to create dropdown caret
 .dropdown-slider--caret {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 2px;
-  vertical-align: middle;
-  border-top: 4px dashed;
-  border-top: 4px solid;
-  border-right: 4px solid transparent;
-  border-left: 4px solid transparent;
+  @include caret(4px);
+
+  margin-left: 6px;
 }
+

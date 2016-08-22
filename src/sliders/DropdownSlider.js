@@ -42,10 +42,10 @@ export default class DropdownSlider extends React.Component {
 
     return (
       <div role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`} aria-haspopup="true" onClick={this.drawSlider} ref={this.setSliderElement}className={`dropdown-slider ${drawnClass}`}>
-        <div ref={(ref) => this.titleElement = ref} tabIndex="0">
+        <a className="dropdown-slider__title" ref={(ref) => this.titleElement = ref} tabIndex="0">
           {this.props.title}
           <span className="dropdown-slider--caret"/>
-        </div>
+        </a>
 
         <div  style={styles} className="dropdown-slider--children">{this.props.children}</div>
       </div>

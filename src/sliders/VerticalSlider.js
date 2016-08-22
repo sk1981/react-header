@@ -29,7 +29,7 @@ export default class VerticalSlider extends React.Component {
         </div>
       );
     } else {
-      return <div aria-haspopup="true" aria-pressed={`${draw}`} aria-expanded={`${draw}`} role="button" className="vertical-slider__title" onClick={this.drawSlider}>{this.props.title}</div>;
+      return <div aria-label="Sub Menu" aria-haspopup="true" aria-pressed={`${draw}`} aria-expanded={`${draw}`} role="button" className="vertical-slider__title" onClick={this.drawSlider}>{this.props.title}</div>;
     }
   }
 
@@ -70,7 +70,8 @@ export default class VerticalSlider extends React.Component {
     const isDrawn = this.state.draw;
     const {isSubSlider, headerHeight, windowWidth, windowHeight} = this.props;
     const drawnClass = isDrawn ? 'vertical-slider--drawn' : '';
-    const width = windowWidth / 2;
+    const sliderLevelClass = isSubSlider ? 'vertical-slider--sub': 'vertical-slider--main';
+    const width = Math.floor(windowWidth * 3/4);
     const childStyles = {
       transform: `translateX(${isDrawn ? '0' : `-${width}px`})`,
       height: `${windowHeight - headerHeight}px`,
@@ -81,7 +82,7 @@ export default class VerticalSlider extends React.Component {
     };
 
     return (
-      <div ref={this.setSliderElement} className={`vertical-slider ${drawnClass}`}>
+      <div ref={this.setSliderElement} className={`vertical-slider ${drawnClass} ${sliderLevelClass}`}>
         {this.getTopBar()}
         <div aria-hidden={!isDrawn} style={childStyles} className="vertical-slider--children">{this.getSliderChild(isSubSlider, this.props.children)}</div>
       </div>

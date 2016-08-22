@@ -1,6 +1,6 @@
 .site-nav__list {
   list-style: none;
-  padding: $header-spacing;
+  padding: 0;
 
   @media screen and (min-width: $mobile-breakpoint) {
     display: inline-block;

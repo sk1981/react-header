@@ -44,7 +44,10 @@ export default class NavigationItem extends React.Component {
                              isSubSlider={true}
                              title={props.text}>{children}</VerticalSlider>;
     } else {
-      return (<DropdownSlider handleClick={this.dropdownClicked} draw={this.state.displayChild} ref={(ref) => this.subMenuElement = ref} title={props.text}>{children}</DropdownSlider>);
+      return (<DropdownSlider handleClick={this.dropdownClicked}
+                              draw={this.state.displayChild}
+                              ref={(ref) => this.subMenuElement = ref}
+                              title={props.text}>{children}</DropdownSlider>);
     }
   }
 

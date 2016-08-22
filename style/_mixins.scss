@@ -13,3 +13,14 @@
   cursor: pointer;
   cursor: hand;
 }
+
+@mixin caret($caret-size) {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-top: $caret-size dashed;
+  border-top: $caret-size solid;
+  border-right: $caret-size solid transparent;
+  border-left: $caret-size solid transparent;
+}
