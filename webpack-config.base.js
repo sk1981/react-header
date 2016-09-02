@@ -6,13 +6,15 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: ['./src/index', './style/main.scss']
+    "react-header": ['./src/main'],
+    "react-header-style": ['./style/main.scss']
   },
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'dist'),
     libraryTarget: 'umd',
-    filename: '[name]-bundle.js',
-    library: 'ReactHeader'
+    filename: '[name].js',
+    library: 'ReactHeader',
+    umdNamedDefine: true
   },
   module: {
     preLoaders: [
@@ -29,7 +31,7 @@ module.exports = {
         }
       },
       {
-        test: /\.scss?$/,
+        test: /\.s?css?$/,
         exclude: /node_modules/,
         loader: ExtractTextPlugin.extract("style-loader", "css-loader!!postcss-loader!sass-loader")
       }
@@ -44,7 +46,7 @@ module.exports = {
     configFile: '.eslintrc'
   },
   plugins: [
-    new ExtractTextPlugin("[name]-styles.css"),
+    new ExtractTextPlugin("[name].css"),
     new StyleLintPlugin({
       failOnError: false,
       syntax: 'scss'

@@ -5,7 +5,9 @@ const webpackCommon = require('./webpack-config.base');
 
 module.exports = merge(webpackCommon, {
   entry: {
-    "app.min": ['./src/index', './style/main.scss']
+    "react-header.min": ['./src/main'],
+    "react-header-style.min": ['./style/main.scss']
+
   },
   externals:  {
     "react": "React",
@@ -13,7 +15,7 @@ module.exports = merge(webpackCommon, {
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
-      include: /\.min.*/
+      include: /(\.min\.)/
     })
   ]
 });
