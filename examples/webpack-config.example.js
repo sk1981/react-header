@@ -15,9 +15,9 @@ module.exports = merge(webpackCommon, {
   },
   entry: {
     'build/basic/app': ['./basic/index.js'],
-    // 'build/styling/app': ['./styling/index.js'],
-    'react-header': [],// override base
-    'react-header-style': []// override base
+    'build/styling/app': ['./styling/index.js', './styling/main-light.scss'],
+    'react-header': null,// override base
+    'react-header-style': null// override base
 
   },
   externals:  {
