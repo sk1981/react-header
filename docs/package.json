@@ -1,0 +1,17 @@
+{
+  "name": "react-header-examples",
+  "version": "0.0.0",
+  "description": "Examples responsive header built in react",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "header",
+    "react-component",
+    "examples"
+  ],
+  "author": "sk1981",
+  "license": "MIT",
+  "devDependencies": {
+    "copy-webpack-plugin": "^3.0.1"
+  }
+}

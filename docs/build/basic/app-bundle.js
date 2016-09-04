@@ -69,36 +69,37 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom = __webpack_require__(3);
 
+	var _reactHeader = __webpack_require__(4);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var ReactHeader = __webpack_require__(4);
-	var Logo = ReactHeader.Logo;
-	var NavigationList = ReactHeader.NavigationList;
-	var NavigationItem = ReactHeader.NavigationItem;
-	var Header = ReactHeader.Header;
+	// const Logo = ReactHeader.Logo;
+	// const NavigationList = ReactHeader.NavigationList;
+	// const NavigationItem = ReactHeader.NavigationItem;
+	// const Header = ReactHeader.Header;
 
 	var header = _react2.default.createElement(
-	  Header,
+	  _reactHeader.Header,
 	  null,
-	  _react2.default.createElement(Logo, { title: 'My Logo', link: 'http://testing.com' }),
+	  _react2.default.createElement(_reactHeader.Logo, { title: 'My Logo', link: 'http://testing.com' }),
 	  _react2.default.createElement(
-	    NavigationList,
+	    _reactHeader.NavigationList,
 	    null,
-	    _react2.default.createElement(NavigationItem, { link: '#home', text: 'Home' }),
+	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#home', text: 'Home' }),
 	    _react2.default.createElement(
-	      NavigationItem,
+	      _reactHeader.NavigationItem,
 	      { text: 'Team' },
 	      _react2.default.createElement(
-	        NavigationList,
+	        _reactHeader.NavigationList,
 	        null,
-	        _react2.default.createElement(NavigationItem, { link: '#local', text: 'Local' }),
-	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Remote' }),
-	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Desktop' }),
-	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Train' })
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#local', text: 'Local' }),
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Remote' }),
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Desktop' }),
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Train' })
 	      )
 	    ),
-	    _react2.default.createElement(NavigationItem, { link: '#contact', text: 'Contact' }),
-	    _react2.default.createElement(NavigationItem, { link: '#', text: 'About Us' })
+	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#contact', text: 'Contact' }),
+	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'About Us' })
 	  ),
 	  _react2.default.createElement('input', { type: 'search', placeholder: 'Search...' })
 	);

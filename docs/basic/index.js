@@ -1,10 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
-const ReactHeader = require("react-header");
-const Logo = ReactHeader.Logo;
-const NavigationList = ReactHeader.NavigationList;
-const NavigationItem = ReactHeader.NavigationItem;
-const Header = ReactHeader.Header;
+import {Logo, NavigationList, NavigationItem, Header} from "react-header";
 
 const header = (
   <Header>
