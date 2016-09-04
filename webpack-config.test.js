@@ -1,7 +1,7 @@
 'use strict';
 
 const merge = require('webpack-merge');
-const webpackCommon = require('./webpack-config.base');
+const webpackCommon = require('./webpack/webpack-config.base');
 
 module.exports = merge(webpackCommon, {
   externals: {

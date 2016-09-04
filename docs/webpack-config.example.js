@@ -1,12 +1,14 @@
 'use strict';
 const webpack = require('webpack');
 const path = require('path');
-const merge = require('webpack-merge');
-const webpackCommon = require('./../webpack-config.base.js');
+const autoprefixer = require('autoprefixer');
+const webpackBase = require('./../webpack/webpack-base');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const parentDir = path.join(__dirname, '..');
 
-module.exports = merge(webpackCommon, {
+module.exports = {
   output: {
     path: path.join(__dirname),
     libraryTarget: 'umd',
@@ -15,16 +17,22 @@ module.exports = merge(webpackCommon, {
   },
   entry: {
     'build/basic/app': ['./basic/index.js'],
-    'build/styling/app': ['./styling/index.js', './styling/main-light.scss'],
-    'react-header': [],// override base
-    'react-header-style': []// override base
-
+    'build/styling/app': ['./styling/index.js', './styling/main-light.scss']
   },
   externals: {
     "react": "React",
     "react-dom": "ReactDOM",
     "react-header": "ReactHeader"
   },
+  module: {
+    loaders: [
+      webpackBase.jsLoader,
+      webpackBase.styleLoader
+    ]
+  },
+  postcss: [
+    autoprefixer({browsers: ['last 3 versions']})
+  ],
   resolve: {
     modulesDirectories: ["../node_modules", "../dist"]
   },
@@ -32,6 +40,7 @@ module.exports = merge(webpackCommon, {
     configFile: '../.eslintrc'
   },
   plugins: [
+    new ExtractTextPlugin("[name].css"),
     new CopyWebpackPlugin([
       {
         context: '../dist',
@@ -42,4 +51,4 @@ module.exports = merge(webpackCommon, {
       copyUnmodified: true
     })
   ]
-});
+};

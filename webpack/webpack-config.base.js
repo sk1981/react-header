@@ -3,6 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const webpackBase = require("./webpack-base");
 
 module.exports = {
   entry: {
@@ -10,7 +11,7 @@ module.exports = {
     "react-header-style": ['./style/main.scss']
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, '../dist'),
     libraryTarget: 'umd',
     filename: '[name].js',
     library: 'ReactHeader',
@@ -21,20 +22,8 @@ module.exports = {
       { test: /\.js?$/, loader: 'eslint', exclude: /node_modules/ }
     ],
     loaders: [
-      {
-        test: /.js?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react'],
-          plugins: ['transform-es2015-function-name']
-        }
-      },
-      {
-        test: /\.s?css?$/,
-        exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader!!postcss-loader!sass-loader")
-      }
+      webpackBase.jsLoader,
+      webpackBase.styleLoader
     ]
   },
   postcss: [
@@ -49,6 +38,7 @@ module.exports = {
     new ExtractTextPlugin("[name].css"),
     new StyleLintPlugin({
       failOnError: false,
+      files: 'style/**/*.s?(a|c)ss',
       syntax: 'scss'
     })
   ]

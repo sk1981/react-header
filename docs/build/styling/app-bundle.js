@@ -2,7 +2,7 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("React"), require("ReactDOM"), require("ReactHeader"));
 	else if(typeof define === 'function' && define.amd)
-		define("ex", ["React", "ReactDOM", "ReactHeader"], factory);
+		define(["React", "ReactDOM", "ReactHeader"], factory);
 	else if(typeof exports === 'object')
 		exports["ex"] = factory(require("React"), require("ReactDOM"), require("ReactHeader"));
 	else

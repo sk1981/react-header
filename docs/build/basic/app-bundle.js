@@ -2,7 +2,7 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("React"), require("ReactDOM"), require("ReactHeader"));
 	else if(typeof define === 'function' && define.amd)
-		define("ex", ["React", "ReactDOM", "ReactHeader"], factory);
+		define(["React", "ReactDOM", "ReactHeader"], factory);
 	else if(typeof exports === 'object')
 		exports["ex"] = factory(require("React"), require("ReactDOM"), require("ReactHeader"));
 	else
@@ -72,11 +72,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _reactHeader = __webpack_require__(4);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// const Logo = ReactHeader.Logo;
-	// const NavigationList = ReactHeader.NavigationList;
-	// const NavigationItem = ReactHeader.NavigationItem;
-	// const Header = ReactHeader.Header;
 
 	var header = _react2.default.createElement(
 	  _reactHeader.Header,
