@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>React Header Docs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css"/>
+    <style>
+        body {
+            line-height: 1.4;
+        }
+        main, header {
+            width: 1200px;
+            margin: auto;
+        }
+
+        header li {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Table of Contents</h1>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#using">Using library</a></li>
+            <li><a href="#basic">Basic Usage</a></li>
+            <li><a href="#styling">Styling Header</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section>
+        <h1 id="introduction">Introduction</h1>
+        <p>
+            <div>React header is a simple header which can be incorporated within your react applications to be used as a header elements.</div>
+            <div>It provides :-
+                <ul>
+                    <li>Fully responsive header </li>
+                    <li>Full keyboard navigation</li>
+                    <li>Built in Accessibility</li>
+                    <li>Higher order components to change the behaviour of the header</li>
+                    <li>Ability to customize as needed</li>
+                </ul>
+            </div>
+        </p>
+    </section>
+    <section>
+        <h1 id="using">Using library</h1>
+        <p>
+            To use this library download the the library from github and either use the source or the bundled versions present in the dist version.
+            Inside the dist folder both the scritp and style files are present.
+        </p>
+        <p>
+            Once downloaded the library the components can be imported and used as below:-
+            <pre class="language-js"><code class="language-js">
+import React from 'react';
+import {render} from 'react-dom';
+import ReactHeader from "react-header";
+const Logo = ReactHeader.Logo;
+const NavigationList = ReactHeader.NavigationList;
+const NavigationItem = ReactHeader.NavigationItem;
+const Header = ReactHeader.Header;
+            </code></pre>
+        </p>
+    </section>
+    <section>
+        <h1 id="basic">Basic Usage</h1>
+        <p>
+            <h3>Components</h3>
+            To use the header the pretty straightfoward. The component needs to be wrapped inside a <em>Header</em>.
+            <div>The different elements can be used as below:-
+                <ul>
+                    <li>Logo: Any Logo that needs to be provided is put under the <em>Logo</em> element.</li>
+                    <li>NavigationList: Any menu, including any submenu is created using <em>NavigationList</em> element.</li>
+                    <li>NavigationItem: All items inside menu is a created using <em>NavigationItem</em> element.</li>
+                    <ul>
+                        <li>NavigationItem can have <em>link</em> and <em>text</em> attributes which is used for creating a link</li>
+                        <li>NavigationItem supports nested NavigationList, which creates Sub Menus</li>
+                    </ul>
+                    <li>Any other items can be added to the menu and will be displayed as it is.</li>
+                </ul>
+            </div>
+        </p>
+        <p>
+        <h3>Example</h3>
+
+        Basic Usage using the above components are given below:-
+        <pre class="language-jsx"><code class="language-jsx">
+const header = (
+    &lt;Header&gt;<br/>
+       &lt;Logo title=&quot;My Logo&quot; link=&quot;http://testing.com&quot;/&gt;<br/>
+       &lt;NavigationList&gt;<br/>
+           &lt;NavigationItem link=&quot;#home&quot; text=&quot;Home&quot;/&gt;<br/>
+           &lt;NavigationItem text=&quot;Team&quot;&gt;<br/>
+               &lt;NavigationList&gt;<br/>
+                   &lt;NavigationItem link=&quot;#local&quot; text=&quot;Local&quot;/&gt;<br/>
+                   &lt;NavigationItem link=&quot;#&quot; text=&quot;Remote&quot;/&gt;<br/>
+                   &lt;NavigationItem link=&quot;#&quot; text=&quot;Desktop&quot;/&gt;<br/>
+                   &lt;NavigationItem link=&quot;#&quot; text=&quot;Train&quot;/&gt;<br/>
+               &lt;/NavigationList&gt;<br/>
+           &lt;/NavigationItem&gt;<br/>
+           &lt;NavigationItem link=&quot;#contact&quot; text=&quot;Contact&quot;/&gt;<br/>
+           &lt;NavigationItem link=&quot;#&quot; text=&quot;About Us&quot;/&gt;<br/>
+       &lt;/NavigationList&gt;<br/>
+       &lt;input type=&quot;search&quot; placeholder=&quot;Search...&quot;/&gt;<br/>
+    &lt;/Header&gt;
+)
+render(header, document.getElementById('header'));
+         </code></pre>
+        </p>
+    </section>
+    <section>
+        <h1 id="styling">Styling Header</h1>
+        <p>
+            There are multiple ways to style headers:-
+            <ul>
+                <li><em>_variables.scss</em> contains the colours used to create the headers and it can be overriden to to provide a new theme for the header.</li>
+                <li>Classes can be passed as className to components and they can be used to styled the components.</li>
+                <li>Same as classes, styles can be passed to the components and they will be respected</li>
+            </ul>
+        </p>
+        <h3>Example - Overriding Variables</h3>
+        <p>
+            You can look at the <em>_variables.scss</em> and define the new values for for the variables present in the file.
+            <div>Create a new file _override-variables.scss and specify new values for the variables you want to override</div>
+            <pre class="language-jsx"><code class="language-scss">
+/**
+* Header overides
+*/
+$header-height: 80px;
+// background color for header
+$header-bg-color: #f1f0f0;
+// Default color for header components
+$header-font-color: #66757f;
+            </code></pre>
+            <div>Then import that file in your main scss file followed by the react-header.scss files</div>
+            <pre class="language-jsx"><code class="language-scss">
+@import "override-variables";
+@import "{path-to-react-header-styles}/main";
+// Other styles
+            </code></pre>
+        </p>
+    </section>
+    <section>
+        <h1>HoC (TBA)</h1>
+    </section>
+    <section>
+        <h1>Events (TBA)</h1>
+    </section>
+</main>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/prism.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/components/prism-jsx.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/components/prism-scss.min.js"></script>
+</body>
+</html>
