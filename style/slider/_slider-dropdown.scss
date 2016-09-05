@@ -1,11 +1,11 @@
 .dropdown-slider--children {
-  display: none;
-  transition: transform 0.5s;
+  transition: all 0.5s;
   position: absolute;
   top: 100%;
-  // Display the children when the slider is drawn
+  visibility: hidden;
+  overflow: hidden;
   .dropdown-slider--drawn & {
-    display: block;
+    visibility: visible;
   }
 }
 
