@@ -22,7 +22,7 @@ Link to documentation : [Site Documentation](https://sk1981.github.io/react-head
 * Polishing (adding proptypes/comments etc)
 * Cleaning/Refactoring JS and CSS Code
 * ~~Add ESLint and StyleLint~~
-* ~~Build
-* Tests - Unit and functional~~
+* ~~Build~~
+* Tests - Unit and functional
 * ~~Examples~~
 * ~~Documentation - Contributing, Usage and Usage Site~~
