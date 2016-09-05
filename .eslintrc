@@ -16,6 +16,7 @@
     "react"
   ],
   "rules": {
+    "no-console": 1,
     "react/jsx-uses-vars": 1,
     "react/jsx-uses-react": 2,
     "react/prop-types": 0
