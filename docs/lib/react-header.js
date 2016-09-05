@@ -1164,7 +1164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DropdownSlider).call(this, props));
 
-	    _this.state = { draw: false, height: 0 };
+	    _this.state = {};
 	    _this.setSliderElement = _this.setSliderElement.bind(_this);
 	    _this.drawSlider = _this.drawSlider.bind(_this);
 	    return _this;
@@ -1178,24 +1178,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getHeight',
 	    value: function getHeight() {
+	      // Scroll height gives the correct height even if we have
+	      // provided a different height and/or have overflow: hidden instead
+	      // of scroll
 	      return this.sliderElement ? this.sliderElement.scrollHeight : 0;
 	    }
 	  }, {
 	    key: 'setSliderElement',
 	    value: function setSliderElement(sliderElement) {
 	      this.sliderElement = sliderElement;
+	      this.setState({ 'fullHeight': this.getHeight() });
 	    }
 	  }, {
 	    key: 'drawSlider',
 	    value: function drawSlider() {
-	      var height = this.getHeight();
 	      if (this.props.handleClick) {
 	        this.props.handleClick();
-	      } else {
-	        this.setState({
-	          draw: !this.state.draw,
-	          height: height
-	        });
+	      }
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      // If menu is being closed Add the current fullHeight to state
+	      if (nextProps.draw === false) {
+	        this.setState({ 'fullHeight': this.getHeight() });
 	      }
 	    }
 	  }, {
@@ -1204,16 +1210,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      var draw = this.props.draw;
+	      // const sliderTransform = draw === true ? '0' : '-100%';
 
-	      var sliderTransform = draw === true ? '0' : '-100%';
 	      var drawnClass = draw ? 'dropdown-slider--drawn' : '';
 	      var styles = {
-	        transform: 'translateY(' + sliderTransform + ')'
+	        height: draw ? this.state.fullHeight + 'px' : 0
 	      };
 
 	      return _react2.default.createElement(
 	        'div',
-	        { role: 'button', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw, 'aria-haspopup': 'true', onClick: this.drawSlider, ref: this.setSliderElement, className: 'dropdown-slider ' + drawnClass },
+	        { role: 'button', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw, 'aria-haspopup': 'true', onClick: this.drawSlider, className: 'dropdown-slider ' + drawnClass },
 	        _react2.default.createElement(
 	          'a',
 	          { className: 'dropdown-slider__title', ref: function ref(_ref) {
@@ -1224,7 +1230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { style: styles, className: 'dropdown-slider--children' },
+	          { ref: this.setSliderElement, style: styles, className: 'dropdown-slider--children' },
 	          this.props.children
 	        )
 	      );
