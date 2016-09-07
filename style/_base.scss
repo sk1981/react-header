@@ -5,6 +5,9 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  //Override tap color as it's not consistent and there are issues with tracking it
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {

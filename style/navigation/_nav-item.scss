@@ -13,6 +13,8 @@
 .site-nav__item-link {
   padding: $nav-item-spacing;
   display: inline-block;
+  // Add minimal margin so that hover outline is fully visible on left side
+  margin-left: 5px;
 }
 
 // Ensure that dropdown title also follows the above padding details

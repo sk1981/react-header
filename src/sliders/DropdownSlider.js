@@ -39,11 +39,13 @@ export default class DropdownSlider extends React.Component {
 
   render() {
     const {draw} = this.props;
-    // const sliderTransform = draw === true ? '0' : '-100%';
     const drawnClass = draw ? 'dropdown-slider--drawn': '';
     const styles = {
       height : draw ? `${this.state.fullHeight}px` : 0
     };
+
+    let childElement = React.Children.only(this.props.children);
+    childElement = React.cloneElement(childElement, {childFocus: this.props.focusChild});
 
     return (
       <div role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`} aria-haspopup="true" onClick={this.drawSlider} className={`dropdown-slider ${drawnClass}`}>
@@ -52,7 +54,7 @@ export default class DropdownSlider extends React.Component {
           <span className="dropdown-slider--caret"/>
         </a>
 
-        <div ref={this.setSliderElement} style={styles} className="dropdown-slider--children">{this.props.children}</div>
+        <div ref={this.setSliderElement} style={styles} className="dropdown-slider--children">{childElement}</div>
       </div>
     );
   }

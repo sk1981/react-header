@@ -4,7 +4,9 @@
   top: 100%;
   visibility: hidden;
   overflow: hidden;
-  .dropdown-slider--drawn & {
+
+  .dropdown-slider--drawn
+  & {
     visibility: visible;
   }
 }
@@ -15,4 +17,3 @@
 
   margin-left: 6px;
 }
-

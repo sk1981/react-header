@@ -3,29 +3,54 @@ import DropdownSlider from '../sliders/DropdownSlider';
 import VerticalSlider from '../sliders/VerticalSlider';
 import KeyEvents from '../events/KeyEvents';
 
+// Get the open close key events
+const NAVIGATION_KEY_EVENTS = [KeyEvents.CODE.DOWN, KeyEvents.CODE.UP];
+const CLOSE_KEY_EVENTS = [KeyEvents.CODE.ESCAPE, KeyEvents.CODE.UP];
+const OPEN_KEY_EVENTS = [KeyEvents.CODE.ENTER, KeyEvents.CODE.SPACE, KeyEvents.CODE.DOWN];
+const ALL_KEY_EVENTS = [...OPEN_KEY_EVENTS, ...CLOSE_KEY_EVENTS];
+
 export default class NavigationItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {displayChild: false};
-    this.handleKey = this.handleKey.bind(this);
+    this.state = {displayChild: false, activeChildIndex: -1};
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.dropdownClicked = this.dropdownClicked.bind(this);
+    this.handleBlurEvent = this.handleBlurEvent.bind(this);
   }
 
-  handleKey(keyEvent) {
+  handleChildKeyEvents(keyEvent) {
     const keyCode = keyEvent.which;
-    const codes = KeyEvents.CODE;
+    const displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
+    const isNavigationKey = NAVIGATION_KEY_EVENTS.indexOf(keyCode) > -1;
+    const isChangeOfDisplay = displayChild !== this.state.displayChild;
+
+    // Ensure that we focus child only when
+    // 1. We are displaying child i.e displayChild=true
+    // 2. The child was earlier not displayed i.e  isChangeOfDisplay = true
+    // 3. Change was trigger by arrow keys i.e. isNavigationKey = true
+    const focusChild = (isChangeOfDisplay && isNavigationKey && displayChild);// eslint-disable-line
+    const state = {
+      displayChild: displayChild,
+      focusChild: displayChild
+    };
+
+    this.setState(state);
+    keyEvent.preventDefault();
+  }
+
+  handleKeyDown(keyEvent) {
+    if (keyEvent.isDefaultPrevented()) {
+      return;
+    }
+    const keyCode = keyEvent.which;
     // handle child keyboard navigation keyevents only if children are present
-    if((this.props.children) &&
-      (codes.DOWN === keyCode || codes.UP === keyCode || codes.ESCAPE === keyCode)) {
-      // Prevent default so page does not moves down
-      keyEvent.preventDefault();
-      this.setState({
-        // do not display if up or escape key is present, display otherwise
-        displayChild: !(codes.UP === keyCode || codes.ESCAPE === keyCode)
-      });
-    } else if(this.props.onKeyEvent ) {
-      this.props.onKeyEvent(this.props.index, keyCode);
+    if(this.props.children && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
+      this.handleChildKeyEvents(keyEvent);
+    }
+
+    if(this.props.onKeyEvent ) {
+      this.props.onKeyEvent(keyEvent, this.props.index, keyCode);
     }
   }
 
@@ -33,6 +58,10 @@ export default class NavigationItem extends React.Component {
     this.setState({
       displayChild: !this.state.displayChild
     });
+  }
+
+  handleBlurEvent() {
+    //TODO: Hide on blur ??
   }
 
   getSubMenuElement(children, props) {
@@ -45,14 +74,16 @@ export default class NavigationItem extends React.Component {
                              title={props.text}>{children}</VerticalSlider>;
     } else {
       return (<DropdownSlider handleClick={this.dropdownClicked}
-                              draw={this.state.displayChild}
+                              focusChild={this.state.focusChild}
+                              draw= {this.state.displayChild}
                               ref={(ref) => this.subMenuElement = ref}
                               title={props.text}>{children}</DropdownSlider>);
     }
   }
 
   componentDidUpdate() {
-    if(this.props.activeIndex === this.props.index) {
+    // not make this nav item focused if child is supposed to be focused
+    if(this.props.activeIndex === this.props.index && !this.state.focusChild) {
       if(this.linkElement) {
         this.linkElement.focus();
       }
@@ -73,7 +104,7 @@ export default class NavigationItem extends React.Component {
     const navigationLink = <a ref={(ref) => this.linkElement = ref} className={`site-nav__item-link`} href={link}>{text}</a>;
     const itemChild = children ? this.getSubMenuElement(children, this.props) : navigationLink;
     return (
-      <li onKeyDown={this.handleKey} className={`site-nav__item`}>
+      <li onBlur={this.handleBlurEvent} onKeyDown={this.handleKeyDown} className={`site-nav__item`}>
         {itemChild}
       </li>
     );
