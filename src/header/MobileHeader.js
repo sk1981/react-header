@@ -2,27 +2,23 @@ import React from 'react';
 import Logo from '../Logo';
 import NavigationList from '../navigation/NavigationList';
 import VerticalSlider from '../sliders/VerticalSlider';
+import ReactHelper from '../utils/ReactHelper'
 
 /**
- * Top level header element which styles a basic header
+ * Gets the child components for Mobile Menu
+ *
+ * It iterates over all child, filters out the logo component (as Logo needs to be displayed on top)
+ * and adds them to the menu
+ *
+ * @param childArray
+ * @param sizeProps
+ * @returns {*}
  */
-
-function getMainNav(navigationChild, sizeProps) {
-  let navListProps;
-  if(Object.assign ) {
-    navListProps = Object.assign({}, sizeProps, {isMainMenu: true});
-  } else {
-    // FOR IE
-    sizeProps.isMainMenu = true;
-    navListProps = sizeProps;
-  }
-  return <nav  role="navigation" key="nav" className="site-navigation">{React.cloneElement(navigationChild, navListProps)}</nav>
-}
-
-
 function getChildComponents(childArray, sizeProps) {
   return childArray.filter(child => child.type !== Logo)
-    .map((child, index) => child.type === NavigationList ? getMainNav(child, sizeProps) : React.cloneElement(child, {key: index}));
+    .map((child, index) => child.type === NavigationList ?
+                                 ReactHelper.getMainNav(child, sizeProps) :
+                                 React.cloneElement(child, {key: index}));
 }
 
 /**
@@ -37,8 +33,8 @@ function getTitleComponent(childArray) {
 }
 
 /**
- *
- **/
+ * Header element for smaller screens, usually found on mobile devices
+ */
 const MobileHeader = (props) => {
   const childArray = React.Children.toArray(props.children);
   const titleComponent = getTitleComponent(childArray);
@@ -56,6 +52,17 @@ const MobileHeader = (props) => {
         {childComponents}
       </VerticalSlider>
   );
+};
+
+MobileHeader.propTypes = {
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.array
+  ]),
+  windowWidth: React.PropTypes.number,
+  windowHeight: React.PropTypes.number,
+  headerHeight: React.PropTypes.number,
+  mode: React.PropTypes.oneOf(['desktop', 'mobile'])
 };
 
 export default MobileHeader

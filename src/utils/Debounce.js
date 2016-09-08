@@ -23,7 +23,7 @@ function now() {
  * @param immediate
  */
 
-export function debounce(func, wait, immediate){
+function debounce(func, wait, immediate){
   var timeout, args, context, timestamp, result;
   if (null == wait) wait = 100;
 
@@ -64,3 +64,5 @@ export function debounce(func, wait, immediate){
 
   return debounced;
 }
+
+export {debounce};

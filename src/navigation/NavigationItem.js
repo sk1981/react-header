@@ -9,7 +9,7 @@ const CLOSE_KEY_EVENTS = [KeyEvents.CODE.ESCAPE, KeyEvents.CODE.UP];
 const OPEN_KEY_EVENTS = [KeyEvents.CODE.ENTER, KeyEvents.CODE.SPACE, KeyEvents.CODE.DOWN];
 const ALL_KEY_EVENTS = [...OPEN_KEY_EVENTS, ...CLOSE_KEY_EVENTS];
 
-export default class NavigationItem extends React.Component {
+class NavigationItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -111,3 +111,14 @@ export default class NavigationItem extends React.Component {
   }
 
 }
+
+NavigationItem.propTypes = {
+  children: React.PropTypes.element,
+  onKeyEvent: React.PropTypes.func,
+  index: React.PropTypes.number,
+  activeIndex: React.PropTypes.number,
+  link: React.PropTypes.string,
+  text: React.PropTypes.string
+};
+
+export default NavigationItem;

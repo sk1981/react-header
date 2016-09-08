@@ -1,3 +1,7 @@
+/**
+ * Transition in JS
+ * @returns {*}
+ */
 export function transitionEndEventName () {
   var i,
     undefined,

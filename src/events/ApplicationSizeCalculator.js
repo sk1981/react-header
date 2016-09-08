@@ -1,9 +1,13 @@
 import React from 'react';
 import DOMHelper from '../utils/DOMHelper';
-import {debounce} from './helper';
+import {debounce} from '../utils/Debounce'; 
 
-
-export default class ApplicationSizeCalculator extends React.Component {
+/**
+ * Component which calculates the size of different parts of
+ * the header and passes those down as properties
+ *
+ */
+class ApplicationSizeCalculator extends React.Component {
 
   constructor(props) {
     super(props);
@@ -23,14 +27,12 @@ export default class ApplicationSizeCalculator extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', this.calculateAppDimensions);
     window.addEventListener('scroll', this.calculateAppDimensions);
-
     this.calculateAppDimensions();
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.calculateAppDimensions);
     window.addEventListener('scroll', this.calculateAppDimensions);
-
   }
 
   /**
@@ -40,3 +42,9 @@ export default class ApplicationSizeCalculator extends React.Component {
     return React.cloneElement(this.props.children, this.state)
   }
 }
+
+ApplicationSizeCalculator.propTypes = {
+  children: React.PropTypes.element.isRequired
+};
+
+export default ApplicationSizeCalculator;

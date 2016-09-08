@@ -1,3 +1,4 @@
+
 const throttle = (func, throttleTime) => {
   const thisArg = this;
   let wait = false;
@@ -12,4 +13,4 @@ const throttle = (func, throttleTime) => {
   };
 };
 
-export default throttle;
+export {throttle};

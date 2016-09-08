@@ -1,13 +1,11 @@
 import React from 'react';
 import NavigationList from '../navigation/NavigationList';
-
-
-function getMainNav(navigationChild) {
-  return <nav  role="navigation" key="nav" className="site-navigation">{React.cloneElement(navigationChild, {isMainMenu: true})}</nav>
-}
+import ReactHelper from '../utils/ReactHelper'
 
 /**
- *
+ * Organizes the desktop children by adding key and marking main
+ * menu with the main menu flag.
+ * 
  * @param children
  * @returns {Array}
  */
@@ -16,7 +14,7 @@ function organizeDesktopChildren(children) {
 
   children.forEach((child, index) => {
     if(child.type === NavigationList) {
-      newChildren.push(getMainNav(child));
+      newChildren.push(ReactHelper.getMainNav(child));
     } else {
       newChildren.push(React.cloneElement(child, {key: index}));
     }
@@ -24,12 +22,26 @@ function organizeDesktopChildren(children) {
   return newChildren;
 }
 
+/**
+ * Header element for largers screens, usually found on desktop devices
+ *
+ * @param props
+ * @returns {XML}
+ * @constructor
+ */
 const DesktopHeader = (props) => {
   return (
     <div>
       {organizeDesktopChildren(props.children)}
     </div>
   );
+};
+
+DesktopHeader.propTypes = {
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.array
+  ])
 };
 
 export default DesktopHeader;

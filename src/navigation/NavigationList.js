@@ -3,7 +3,7 @@ import ReactHelper from '../utils/ReactHelper';
 import {getListHelper} from './NavigationListHelper';
 
 
-export default class NavigationList extends React.Component {
+class NavigationList extends React.Component {
 
   constructor(props) {
     super(props);
@@ -58,3 +58,14 @@ export default class NavigationList extends React.Component {
     );
   }
 }
+
+NavigationList.propTypes = {
+  isMainMenu: React.PropTypes.bool,
+  children: React.PropTypes.array.isRequired,
+  windowWidth: React.PropTypes.number,
+  windowHeight: React.PropTypes.number,
+  headerHeight: React.PropTypes.number,
+  mode: React.PropTypes.oneOf(['desktop', 'mobile'])
+};
+
+export default NavigationList;

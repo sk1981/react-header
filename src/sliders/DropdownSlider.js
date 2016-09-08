@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default class DropdownSlider extends React.Component {
+/**
+ * Slider which presents the children wrapped under as a drop
+ *
+ */
+class DropdownSlider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -59,3 +63,13 @@ export default class DropdownSlider extends React.Component {
     );
   }
 }
+
+DropdownSlider.propTypes = {
+  title: React.PropTypes.string,
+  children: React.PropTypes.element.isRequired,
+  handleClick: React.PropTypes.func,
+  focusChild: React.PropTypes.bool,
+  draw: React.PropTypes.bool
+};
+
+export default DropdownSlider;

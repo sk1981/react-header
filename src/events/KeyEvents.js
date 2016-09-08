@@ -1,3 +1,6 @@
+/**
+ * Contains utils related to keyboard events like keycodes
+ */
 export default {
   CODE : {
     LEFT: 37,
