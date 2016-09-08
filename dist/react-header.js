@@ -66,11 +66,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Header = exports.NavigationItem = exports.NavigationList = exports.Logo = undefined;
+	exports.StickyHeader = exports.StickyOnScrollUpHeader = exports.Header = exports.NavigationItem = exports.NavigationList = exports.Logo = undefined;
 
 	var _Header = __webpack_require__(2);
 
 	var _Header2 = _interopRequireDefault(_Header);
+
+	var _StickyHeader = __webpack_require__(18);
+
+	var _StickyHeader2 = _interopRequireDefault(_StickyHeader);
+
+	var _StickyOnScrollUpHeader = __webpack_require__(19);
+
+	var _StickyOnScrollUpHeader2 = _interopRequireDefault(_StickyOnScrollUpHeader);
 
 	var _Logo = __webpack_require__(6);
 
@@ -80,7 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _NavigationList2 = _interopRequireDefault(_NavigationList);
 
-	var _NavigationItem = __webpack_require__(17);
+	var _NavigationItem = __webpack_require__(21);
 
 	var _NavigationItem2 = _interopRequireDefault(_NavigationItem);
 
@@ -90,6 +98,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.NavigationList = _NavigationList2.default;
 	exports.NavigationItem = _NavigationItem2.default;
 	exports.Header = _Header2.default;
+	exports.StickyOnScrollUpHeader = _StickyOnScrollUpHeader2.default;
+	exports.StickyHeader = _StickyHeader2.default;
 
 /***/ },
 /* 2 */
@@ -109,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ResizableHeader2 = _interopRequireDefault(_ResizableHeader);
 
-	var _ApplicationSizeCalculator = __webpack_require__(14);
+	var _ApplicationSizeCalculator = __webpack_require__(15);
 
 	var _ApplicationSizeCalculator2 = _interopRequireDefault(_ApplicationSizeCalculator);
 
@@ -117,6 +127,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * Top level header element which styles a basic header
+	 *
+	 * Consists of Logo, Navigation Bar and any other item
 	 */
 	var Header = function Header(props) {
 	  return _react2.default.createElement(
@@ -128,6 +140,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      props.children
 	    )
 	  );
+	};
+
+	Header.propTypes = {
+	  children: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.element)
 	};
 
 	exports.default = Header;
@@ -156,16 +172,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _MobileHeader2 = _interopRequireDefault(_MobileHeader);
 
-	var _DesktopHeader = __webpack_require__(13);
+	var _DesktopHeader = __webpack_require__(14);
 
 	var _DesktopHeader2 = _interopRequireDefault(_DesktopHeader);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/**
+	 * Gets the type of the header, based on the mode
+	 *
+	 * @param props
+	 * @returns {*}
+	 */
 	function getHeaderChild(props) {
 	  var mode = props.mode;
 
 	  var headerChild = void 0;
+	  // We cannot have a default mode otherwise the app may switch
+	  // from the default mode to current mode.
+	  // Hence, just show empty data till the app is initialized
 	  if (mode === undefined) {
 	    headerChild = _react2.default.createElement('div', null);
 	  } else if (mode === 'desktop') {
@@ -177,7 +202,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Top level header element which styles a basic header
+	 * Header element which changes it's type according to
+	 * window size/current mode
 	 */
 	var ResizableHeader = function ResizableHeader(props) {
 
@@ -214,37 +240,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _NavigationList2 = _interopRequireDefault(_NavigationList);
 
-	var _VerticalSlider = __webpack_require__(11);
+	var _VerticalSlider = __webpack_require__(12);
 
 	var _VerticalSlider2 = _interopRequireDefault(_VerticalSlider);
+
+	var _ReactHelper = __webpack_require__(8);
+
+	var _ReactHelper2 = _interopRequireDefault(_ReactHelper);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Top level header element which styles a basic header
+	 * Gets the child components for Mobile Menu
+	 *
+	 * It iterates over all child, filters out the logo component (as Logo needs to be displayed on top)
+	 * and adds them to the menu
+	 *
+	 * @param childArray
+	 * @param sizeProps
+	 * @returns {*}
 	 */
-
-	function getMainNav(navigationChild, sizeProps) {
-	  var navListProps = void 0;
-	  if (Object.assign) {
-	    navListProps = Object.assign({}, sizeProps, { isMainMenu: true });
-	  } else {
-	    // FOR IE
-	    sizeProps.isMainMenu = true;
-	    navListProps = sizeProps;
-	  }
-	  return _react2.default.createElement(
-	    'nav',
-	    { role: 'navigation', key: 'nav', className: 'site-navigation' },
-	    _react2.default.cloneElement(navigationChild, navListProps)
-	  );
-	}
-
 	function getChildComponents(childArray, sizeProps) {
 	  return childArray.filter(function (child) {
 	    return child.type !== _Logo2.default;
 	  }).map(function (child, index) {
-	    return child.type === _NavigationList2.default ? getMainNav(child, sizeProps) : _react2.default.cloneElement(child, { key: index });
+	    return child.type === _NavigationList2.default ? _ReactHelper2.default.getMainNav(child, sizeProps) : _react2.default.cloneElement(child, { key: index });
 	  });
 	}
 
@@ -262,8 +282,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 *
-	 **/
+	 * Header element for smaller screens, usually found on mobile devices
+	 */
 	var MobileHeader = function MobileHeader(props) {
 	  var childArray = _react2.default.Children.toArray(props.children);
 	  var titleComponent = getTitleComponent(childArray);
@@ -281,6 +301,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      titleComponent: titleComponent }),
 	    childComponents
 	  );
+	};
+
+	MobileHeader.propTypes = {
+	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.element, _react2.default.PropTypes.array]),
+	  windowWidth: _react2.default.PropTypes.number,
+	  windowHeight: _react2.default.PropTypes.number,
+	  headerHeight: _react2.default.PropTypes.number,
+	  mode: _react2.default.PropTypes.oneOf(['desktop', 'mobile'])
 	};
 
 	exports.default = MobileHeader;
@@ -301,6 +329,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/**
+	 * Used for displaying a simple logo
+	 *
+	 * Can either be a text, image or component
+	 * By default logo will be on the top left and will always be displayed as the top header
+	 *
+	 * @param props
+	 * @returns {XML}
+	 * @constructor
+	 */
 	var Logo = function Logo(props) {
 	  return _react2.default.createElement(
 	    "div",
@@ -311,6 +349,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      props.title
 	    ) : props.title
 	  );
+	};
+
+	Logo.propTypes = {
+	  link: _react2.default.PropTypes.string,
+	  title: _react2.default.PropTypes.string
 	};
 
 	exports.default = Logo;
@@ -335,9 +378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ReactHelper2 = _interopRequireDefault(_ReactHelper);
 
-	var _KeyEvents = __webpack_require__(10);
-
-	var _KeyEvents2 = _interopRequireDefault(_KeyEvents);
+	var _NavigationListHelper = __webpack_require__(10);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -362,19 +403,38 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _createClass(NavigationList, [{
 	    key: 'handleKeyEvent',
-	    value: function handleKeyEvent(index, keyCode) {
+	    value: function handleKeyEvent(keyEvent, index, keyCode) {
+	      var listHelper = (0, _NavigationListHelper.getListHelper)(this.props.isMainMenu);
+
+	      if (listHelper.previousKeyCode !== keyCode && listHelper.nextKeyCode !== keyCode) {
+	        // IF it does not needs to handle the keyCode, then just return
+	        return;
+	      }
+
 	      // Note that here were are not taking next index from state but from the argument
 	      // To use state, we would need to ensure that the state value is tracked properly and
 	      // our component is notified of any focus/blur events caused due to clicks outside
 	      var newActiveIndex = -1;
-	      if (_KeyEvents2.default.CODE.LEFT === keyCode) {
+
+	      if (listHelper.previousKeyCode === keyCode) {
 	        newActiveIndex = index - 1;
-	      } else if (_KeyEvents2.default.CODE.RIGHT === keyCode) {
+	      } else if (listHelper.nextKeyCode === keyCode) {
 	        newActiveIndex = index + 1;
 	      }
 	      if (newActiveIndex > -1 && newActiveIndex < this.props.children.length) {
 	        this.setState({
 	          activeIndex: newActiveIndex
+	        });
+	        keyEvent.preventDefault();
+	      }
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      // If menu is being closed Add the current fullHeight to state
+	      if (nextProps.childFocus === true) {
+	        this.setState({
+	          activeIndex: 0
 	        });
 	      }
 	    }
@@ -389,11 +449,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var mode = _props.mode;
 	      var headerHeight = _props.headerHeight;
 
+	      var listHelper = (0, _NavigationListHelper.getListHelper)(isMainMenu);
 	      var activeIndex = this.state.activeIndex;
 	      var childProps = { windowWidth: windowWidth, windowHeight: windowHeight, activeIndex: activeIndex, mode: mode, headerHeight: headerHeight, onKeyEvent: this.handleKeyEvent };
 	      return _react2.default.createElement(
 	        'ul',
-	        { className: 'site-nav__list ' + (!isMainMenu ? 'site-nav__list--sub' : '') },
+	        { className: 'site-nav__list ' + listHelper.class },
 	        _ReactHelper2.default.addPropsToChildren(children, childProps, true)
 	      );
 	    }
@@ -401,6 +462,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  return NavigationList;
 	}(_react2.default.Component);
+
+	NavigationList.propTypes = {
+	  isMainMenu: _react2.default.PropTypes.bool,
+	  children: _react2.default.PropTypes.array.isRequired,
+	  windowWidth: _react2.default.PropTypes.number,
+	  windowHeight: _react2.default.PropTypes.number,
+	  headerHeight: _react2.default.PropTypes.number,
+	  mode: _react2.default.PropTypes.oneOf(['desktop', 'mobile'])
+	};
 
 	exports.default = NavigationList;
 
@@ -425,6 +495,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
+
+	  /**
+	   * Gets a lit of react children and appends the given properties
+	   * to each of them one by one
+	   *
+	   * Additionally takes addIndex attribute to add an index field
+	   * which denotes the index of the given child in the children array
+	   *
+	   * @param children
+	   * @param props
+	   * @param addIndex
+	   * @returns {*}
+	   */
 	  addPropsToChildren: function addPropsToChildren(children, props) {
 	    var addIndex = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
@@ -432,6 +515,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var finalProps = addIndex ? _ObjectHelper2.default.assignProperties({}, props, { index: index }) : props;
 	      return _react2.default.cloneElement(child, finalProps);
 	    });
+	  },
+
+
+	  /**
+	   * Gets the main navigation object by appending isMainMenu Property
+	   *
+	   * @param navigationChild
+	   * @param originalProps
+	   * @returns {XML}
+	   */
+	  getMainNav: function getMainNav(navigationChild, originalProps) {
+	    var navListProps = _ObjectHelper2.default.assignProperties({}, originalProps, { isMainMenu: true });
+	    return _react2.default.createElement(
+	      'nav',
+	      { role: 'navigation', key: 'nav', className: 'site-navigation' },
+	      _react2.default.cloneElement(navigationChild, navListProps)
+	    );
 	  }
 	};
 
@@ -481,6 +581,64 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getListHelper = getListHelper;
+
+	var _KeyEvents = __webpack_require__(11);
+
+	var _KeyEvents2 = _interopRequireDefault(_KeyEvents);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * File to help manage keyboard events in NavigationList
+	 * The main difference is there because NavigationList for main menu is
+	 * horizontal and we navigate it by using right and left arrow
+	 *
+	 * On the other hand for sub menu, it is a dropdown and we navigate by
+	 * using up and down keys
+	 */
+
+	/**
+	 * Helper for sub menus
+	 *
+	 * @type {{class: string, nextKeyCode: number, previousKeyCode: number}}
+	 */
+	var SubListHelper = {
+	  class: 'site-nav__list--sub',
+	  nextKeyCode: _KeyEvents2.default.CODE.DOWN, // sublist we use down to move to next
+	  previousKeyCode: _KeyEvents2.default.CODE.UP // sublist we use up to move to previous
+	};
+
+	/**
+	 * Help for main menu
+	 *
+	 * @type {{class: string, nextKeyCode: number, previousKeyCode: number}}
+	 */
+	var MainListHelper = {
+	  class: 'site-nav__list--main',
+	  nextKeyCode: _KeyEvents2.default.CODE.RIGHT, // mainlist - we use right for next
+	  previousKeyCode: _KeyEvents2.default.CODE.LEFT // mainlist - we use left for next
+	};
+
+	/**
+	 * Gets the helper base of type of menu
+	 *
+	 * @param isMainMenu
+	 * @returns {{class: string, nextKeyCode: number, previousKeyCode: number}}
+	 */
+	function getListHelper(isMainMenu) {
+	  return isMainMenu === true ? MainListHelper : SubListHelper;
+	}
+
+/***/ },
+/* 11 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -488,18 +646,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	/**
+	 * Contains utils related to keyboard events like keycodes
+	 */
 	exports.default = {
 	  CODE: {
 	    LEFT: 37,
 	    RIGHT: 39,
 	    UP: 38,
 	    DOWN: 40,
-	    ESCAPE: 27
+	    ESCAPE: 27,
+	    ENTER: 13,
+	    SPACE: 32
 	  }
 	};
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -514,7 +677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SliderToggle = __webpack_require__(12);
+	var _SliderToggle = __webpack_require__(13);
 
 	var _SliderToggle2 = _interopRequireDefault(_SliderToggle);
 
@@ -526,7 +689,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	//TODO : Very similiar to dropdown sldier
+	/**
+	 * A vertical slide menu which spans full vertical width and slides horizontally
+	 */
 	var VerticalSlider = function (_React$Component) {
 	  _inherits(VerticalSlider, _React$Component);
 
@@ -536,7 +701,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VerticalSlider).call(this, props));
 
 	    _this.state = { draw: false };
-	    _this.setSliderElement = _this.setSliderElement.bind(_this);
 	    _this.drawSlider = _this.drawSlider.bind(_this);
 	    return _this;
 	  }
@@ -544,7 +708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Gets the top bar if the title component is defined.
 	   * 
-	   * If it's not defined, it considers titlecomponent to be
+	   * If it's not defined, it considers title component to be
 	   * absent and does not returns any data
 	   * 
 	   * @returns {XML}
@@ -567,16 +731,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          { 'aria-label': 'Sub Menu', 'aria-haspopup': 'true', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw, role: 'button', className: 'vertical-slider__title', onClick: this.drawSlider },
+	          { 'aria-label': 'Sub Menu',
+	            'aria-haspopup': 'true',
+	            'aria-pressed': '' + draw,
+	            'aria-expanded': '' + draw,
+	            role: 'button',
+	            className: 'vertical-slider__title',
+	            onClick: this.drawSlider },
 	          this.props.title
 	        );
 	      }
 	    }
-	  }, {
-	    key: 'setSliderElement',
-	    value: function setSliderElement(sliderElement) {
-	      this.sliderElement = sliderElement;
-	    }
+
+	    /**
+	     * Opens the slider
+	     */
+
 	  }, {
 	    key: 'drawSlider',
 	    value: function drawSlider() {
@@ -584,6 +754,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        draw: !this.state.draw
 	      });
 	    }
+
+	    /**
+	     * Gets the children present in a slider.
+	     *
+	     * All it does is adds a "Back" element to the list of children
+	     * so as to go back to the original slider.
+	     *
+	     * @param isSubSlider
+	     * @param children
+	     * @returns {*}
+	     */
+
 	  }, {
 	    key: 'getSliderChild',
 	    value: function getSliderChild(isSubSlider, children) {
@@ -609,7 +791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Ideal approach should have been to use 'fixed' for both child and parent sliders, but due to issues in
 	     * render in different browsers, had to take this approach.
 	     *
-	     * Should re-visit this later - maybe extract out child and pull all of them in one heirachy
+	     * Should re-visit this later - maybe extract out child and pull all of them in one hierarchy
 	     *
 	     * @returns {XML}
 	     */
@@ -617,6 +799,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      var isDrawn = this.state.draw;
 	      var _props = this.props;
 	      var isSubSlider = _props.isSubSlider;
@@ -626,6 +810,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var drawnClass = isDrawn ? 'vertical-slider--drawn' : '';
 	      var sliderLevelClass = isSubSlider ? 'vertical-slider--sub' : 'vertical-slider--main';
+	      //TODO : Make props
 	      var width = Math.floor(windowWidth * 3 / 4);
 	      var childStyles = {
 	        transform: 'translateX(' + (isDrawn ? '0' : '-' + width + 'px') + ')',
@@ -638,11 +823,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return _react2.default.createElement(
 	        'div',
-	        { ref: this.setSliderElement, className: 'vertical-slider ' + drawnClass + ' ' + sliderLevelClass },
+	        { ref: function ref(_ref) {
+	            return _this2.sliderElement = _ref;
+	          },
+	          className: 'vertical-slider ' + drawnClass + ' ' + sliderLevelClass },
 	        this.getTopBar(),
 	        _react2.default.createElement(
 	          'div',
-	          { 'aria-hidden': !isDrawn, style: childStyles, className: 'vertical-slider--children' },
+	          { 'aria-hidden': !isDrawn, style: childStyles,
+	            className: 'vertical-slider--children' },
 	          this.getSliderChild(isSubSlider, this.props.children)
 	        )
 	      );
@@ -652,10 +841,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return VerticalSlider;
 	}(_react2.default.Component);
 
+	VerticalSlider.propTypes = {
+	  titleComponent: _react2.default.PropTypes.element,
+	  title: _react2.default.PropTypes.string,
+	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.element, _react2.default.PropTypes.array]),
+	  windowWidth: _react2.default.PropTypes.number,
+	  windowHeight: _react2.default.PropTypes.number,
+	  headerHeight: _react2.default.PropTypes.number,
+	  isSubSlider: _react2.default.PropTypes.bool
+	};
+
 	exports.default = VerticalSlider;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -678,6 +877,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	 * The toggle icon on clicking of which we can 
+	 * open/close the mobile menu
+	 *
+	 */
 	var NavigationToggle = function (_React$Component) {
 	  _inherits(NavigationToggle, _React$Component);
 
@@ -702,10 +906,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var openStateClass = toggleOpen ? 'slider-toggle--open' : '';
 	      var label = toggleOpen ? "Slider Expanded" : "Slider Closed";
-	      //TODO : Add Aria Controls
 	      return _react2.default.createElement(
 	        'span',
-	        { 'aria-label': label, role: 'button', 'aria-pressed': '' + toggleOpen, 'aria-expanded': '' + toggleOpen, 'aria-haspopup': 'true', className: 'slider-toggle__wrapper', onClick: this.toggledSlider },
+	        { 'aria-label': label, role: 'button', 'aria-pressed': '' + toggleOpen,
+	          'aria-expanded': '' + toggleOpen, 'aria-haspopup': 'true',
+	          className: 'slider-toggle__wrapper', onClick: this.toggledSlider },
 	        _react2.default.createElement('span', { className: 'slider-toggle ' + openStateClass })
 	      );
 	    }
@@ -714,10 +919,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return NavigationToggle;
 	}(_react2.default.Component);
 
+	NavigationToggle.propTypes = {
+	  onSliderToggle: _react2.default.PropTypes.func,
+	  toggleOpen: _react2.default.PropTypes.bool
+	};
+
 	exports.default = NavigationToggle;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -734,18 +944,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _NavigationList2 = _interopRequireDefault(_NavigationList);
 
+	var _ReactHelper = __webpack_require__(8);
+
+	var _ReactHelper2 = _interopRequireDefault(_ReactHelper);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function getMainNav(navigationChild) {
-	  return _react2.default.createElement(
-	    'nav',
-	    { role: 'navigation', key: 'nav', className: 'site-navigation' },
-	    _react2.default.cloneElement(navigationChild, { isMainMenu: true })
-	  );
-	}
-
 	/**
-	 *
+	 * Organizes the desktop children by adding key and marking main
+	 * menu with the main menu flag.
+	 * 
 	 * @param children
 	 * @returns {Array}
 	 */
@@ -754,7 +962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  children.forEach(function (child, index) {
 	    if (child.type === _NavigationList2.default) {
-	      newChildren.push(getMainNav(child));
+	      newChildren.push(_ReactHelper2.default.getMainNav(child));
 	    } else {
 	      newChildren.push(_react2.default.cloneElement(child, { key: index }));
 	    }
@@ -762,6 +970,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return newChildren;
 	}
 
+	/**
+	 * Header element for largers screens, usually found on desktop devices
+	 *
+	 * @param props
+	 * @returns {XML}
+	 * @constructor
+	 */
 	var DesktopHeader = function DesktopHeader(props) {
 	  return _react2.default.createElement(
 	    'div',
@@ -770,10 +985,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  );
 	};
 
+	DesktopHeader.propTypes = {
+	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.element, _react2.default.PropTypes.array])
+	};
+
 	exports.default = DesktopHeader;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -788,11 +1007,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _DOMHelper = __webpack_require__(15);
+	var _DOMHelper = __webpack_require__(16);
 
 	var _DOMHelper2 = _interopRequireDefault(_DOMHelper);
 
-	var _helper = __webpack_require__(16);
+	var _Debounce = __webpack_require__(17);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -802,6 +1021,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	 * Component which calculates the size of different parts of
+	 * the header and passes those down as properties
+	 *
+	 */
 	var ApplicationSizeCalculator = function (_React$Component) {
 	  _inherits(ApplicationSizeCalculator, _React$Component);
 
@@ -810,7 +1034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ApplicationSizeCalculator).call(this, props));
 
-	    _this.calculateAppDimensions = (0, _helper.debounce)(_this.calculateAppDimensions.bind(_this), 200);
+	    _this.calculateAppDimensions = (0, _Debounce.debounce)(_this.calculateAppDimensions.bind(_this), 200);
 	    return _this;
 	  }
 
@@ -830,7 +1054,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      window.addEventListener('resize', this.calculateAppDimensions);
 	      window.addEventListener('scroll', this.calculateAppDimensions);
-
 	      this.calculateAppDimensions();
 	    }
 	  }, {
@@ -854,10 +1077,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return ApplicationSizeCalculator;
 	}(_react2.default.Component);
 
+	ApplicationSizeCalculator.propTypes = {
+	  children: _react2.default.PropTypes.element.isRequired
+	};
+
 	exports.default = ApplicationSizeCalculator;
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -904,7 +1131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -912,7 +1139,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.debounce = debounce;
 	/**
 	 * Module dependencies.
 	 */
@@ -980,8 +1206,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return debounced;
 	}
 
+	exports.debounce = debounce;
+
 /***/ },
-/* 17 */
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Header = __webpack_require__(2);
+
+	var _Header2 = _interopRequireDefault(_Header);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * A sticky header HoC which makes the header stick to the top of the screen
+	 *
+	 * @param props
+	 * @returns {XML}
+	 * @constructor
+	 */
+	var StickyHeader = function StickyHeader(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'sticky-header' },
+	    _react2.default.createElement(
+	      _Header2.default,
+	      props,
+	      props.children
+	    )
+	  );
+	};
+
+	StickyHeader.propTypes = {
+	  children: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.element)
+	};
+
+	exports.default = StickyHeader;
+
+/***/ },
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -996,15 +1269,157 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _DropdownSlider = __webpack_require__(18);
+	var _Header = __webpack_require__(2);
+
+	var _Header2 = _interopRequireDefault(_Header);
+
+	var _Throttle = __webpack_require__(20);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SCROLL_HEADER_THROTTLE_TIME = 20;
+
+	/**
+	 * Header which is not sticky while scroll down but sticks
+	 *  to the top when you are scrolling up
+	 *
+	 *  It's meant to wrap the header element.
+	 *
+	 * Note: It introduces a extra div but planning to remove that
+	 */
+
+	var StickyOnScrollUpHeader = function (_React$Component) {
+	  _inherits(StickyOnScrollUpHeader, _React$Component);
+
+	  function StickyOnScrollUpHeader(props) {
+	    _classCallCheck(this, StickyOnScrollUpHeader);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StickyOnScrollUpHeader).call(this, props));
+
+	    _this.state = {};
+	    _this.handleScroll = (0, _Throttle.throttle)(_this.handleScroll.bind(_this), SCROLL_HEADER_THROTTLE_TIME);
+	    _this.setHeader = _this.setHeader.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(StickyOnScrollUpHeader, [{
+	    key: 'setHeader',
+	    value: function setHeader(header) {
+	      this.header = header;
+	    }
+	  }, {
+	    key: 'handleScroll',
+	    value: function handleScroll() {
+	      var headerHeight = this.header.clientHeight;
+	      var currentScrollTop = window.pageYOffset || 0;
+	      var direction = currentScrollTop - this.state.scrollTop > 0 ? 'DOWN' : 'UP';
+	      var isHeaderVisible = headerHeight > currentScrollTop;
+	      this.setState({
+	        direction: direction,
+	        scrollTop: currentScrollTop,
+	        isHeaderVisible: isHeaderVisible,
+	        headerHeight: headerHeight
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('scroll', this.handleScroll);
+	      // Fire it once for initial setup
+	      this.handleScroll();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('scroll', this.handleScroll);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _state = this.state;
+	      var direction = _state.direction;
+	      var isHeaderVisible = _state.isHeaderVisible;
+	      var headerHeight = _state.headerHeight;
+
+	      var isStickyClass = direction === 'UP' ? 'sticky-header' : '';
+	      // Header should be moved up when it's not visible, so that it can be animated
+	      var style = {
+	        transform: 'translateY(-' + (isHeaderVisible || direction === 'UP' ? '0' : headerHeight) + 'px)'
+	      };
+	      return _react2.default.createElement(
+	        'div',
+	        { ref: this.setHeader, style: style, className: 'sticky-scrollup-header ' + isStickyClass },
+	        _react2.default.createElement(_Header2.default, this.props)
+	      );
+	    }
+	  }]);
+
+	  return StickyOnScrollUpHeader;
+	}(_react2.default.Component);
+
+	exports.default = StickyOnScrollUpHeader;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var throttle = function throttle(func, throttleTime) {
+	  var thisArg = undefined;
+	  var wait = false;
+	  return function () {
+	    if (!wait) {
+	      for (var _len = arguments.length, argsArr = Array(_len), _key = 0; _key < _len; _key++) {
+	        argsArr[_key] = arguments[_key];
+	      }
+
+	      func.apply(thisArg, argsArr);
+	      wait = true;
+	      setTimeout(function () {
+	        wait = false;
+	      }, throttleTime);
+	    }
+	  };
+	};
+
+	exports.throttle = throttle;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _DropdownSlider = __webpack_require__(22);
 
 	var _DropdownSlider2 = _interopRequireDefault(_DropdownSlider);
 
-	var _VerticalSlider = __webpack_require__(11);
+	var _VerticalSlider = __webpack_require__(12);
 
 	var _VerticalSlider2 = _interopRequireDefault(_VerticalSlider);
 
-	var _KeyEvents = __webpack_require__(10);
+	var _KeyEvents = __webpack_require__(11);
 
 	var _KeyEvents2 = _interopRequireDefault(_KeyEvents);
 
@@ -1016,6 +1431,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Get the open close key events
+	var NAVIGATION_KEY_EVENTS = [_KeyEvents2.default.CODE.DOWN, _KeyEvents2.default.CODE.UP];
+	var CLOSE_KEY_EVENTS = [_KeyEvents2.default.CODE.ESCAPE, _KeyEvents2.default.CODE.UP];
+	var OPEN_KEY_EVENTS = [_KeyEvents2.default.CODE.ENTER, _KeyEvents2.default.CODE.SPACE, _KeyEvents2.default.CODE.DOWN];
+	var ALL_KEY_EVENTS = [].concat(OPEN_KEY_EVENTS, CLOSE_KEY_EVENTS);
+
 	var NavigationItem = function (_React$Component) {
 	  _inherits(NavigationItem, _React$Component);
 
@@ -1024,27 +1445,48 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NavigationItem).call(this, props));
 
-	    _this.state = { displayChild: false };
-	    _this.handleKey = _this.handleKey.bind(_this);
+	    _this.state = { displayChild: false, activeChildIndex: -1 };
+	    _this.handleKeyDown = _this.handleKeyDown.bind(_this);
 	    _this.dropdownClicked = _this.dropdownClicked.bind(_this);
+	    _this.handleBlurEvent = _this.handleBlurEvent.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(NavigationItem, [{
-	    key: 'handleKey',
-	    value: function handleKey(keyEvent) {
+	    key: 'handleChildKeyEvents',
+	    value: function handleChildKeyEvents(keyEvent) {
 	      var keyCode = keyEvent.which;
-	      var codes = _KeyEvents2.default.CODE;
+	      var displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
+	      var isNavigationKey = NAVIGATION_KEY_EVENTS.indexOf(keyCode) > -1;
+	      var isChangeOfDisplay = displayChild !== this.state.displayChild;
+
+	      // Ensure that we focus child only when
+	      // 1. We are displaying child i.e displayChild=true
+	      // 2. The child was earlier not displayed i.e  isChangeOfDisplay = true
+	      // 3. Change was trigger by arrow keys i.e. isNavigationKey = true
+	      var focusChild = isChangeOfDisplay && isNavigationKey && displayChild; // eslint-disable-line
+	      var state = {
+	        displayChild: displayChild,
+	        focusChild: displayChild
+	      };
+
+	      this.setState(state);
+	      keyEvent.preventDefault();
+	    }
+	  }, {
+	    key: 'handleKeyDown',
+	    value: function handleKeyDown(keyEvent) {
+	      if (keyEvent.isDefaultPrevented()) {
+	        return;
+	      }
+	      var keyCode = keyEvent.which;
 	      // handle child keyboard navigation keyevents only if children are present
-	      if (this.props.children && (codes.DOWN === keyCode || codes.UP === keyCode || codes.ESCAPE === keyCode)) {
-	        // Prevent default so page does not moves down
-	        keyEvent.preventDefault();
-	        this.setState({
-	          // do not display if up or escape key is present, display otherwise
-	          displayChild: !(codes.UP === keyCode || codes.ESCAPE === keyCode)
-	        });
-	      } else if (this.props.onKeyEvent) {
-	        this.props.onKeyEvent(this.props.index, keyCode);
+	      if (this.props.children && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
+	        this.handleChildKeyEvents(keyEvent);
+	      }
+
+	      if (this.props.onKeyEvent) {
+	        this.props.onKeyEvent(keyEvent, this.props.index, keyCode);
 	      }
 	    }
 	  }, {
@@ -1053,6 +1495,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState({
 	        displayChild: !this.state.displayChild
 	      });
+	    }
+	  }, {
+	    key: 'handleBlurEvent',
+	    value: function handleBlurEvent() {
+	      //TODO: Hide on blur ??
 	    }
 	  }, {
 	    key: 'getSubMenuElement',
@@ -1074,6 +1521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _react2.default.createElement(
 	          _DropdownSlider2.default,
 	          { handleClick: this.dropdownClicked,
+	            focusChild: this.state.focusChild,
 	            draw: this.state.displayChild,
 	            ref: function ref(_ref) {
 	              return _this2.subMenuElement = _ref;
@@ -1086,7 +1534,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      if (this.props.activeIndex === this.props.index) {
+	      // not make this nav item focused if child is supposed to be focused
+	      if (this.props.activeIndex === this.props.index && !this.state.focusChild) {
 	        if (this.linkElement) {
 	          this.linkElement.focus();
 	        }
@@ -1121,7 +1570,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var itemChild = children ? this.getSubMenuElement(children, this.props) : navigationLink;
 	      return _react2.default.createElement(
 	        'li',
-	        { onKeyDown: this.handleKey, className: 'site-nav__item' },
+	        { onBlur: this.handleBlurEvent, onKeyDown: this.handleKeyDown, className: 'site-nav__item' },
 	        itemChild
 	      );
 	    }
@@ -1130,10 +1579,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return NavigationItem;
 	}(_react2.default.Component);
 
+	NavigationItem.propTypes = {
+	  children: _react2.default.PropTypes.element,
+	  onKeyEvent: _react2.default.PropTypes.func,
+	  index: _react2.default.PropTypes.number,
+	  activeIndex: _react2.default.PropTypes.number,
+	  link: _react2.default.PropTypes.string,
+	  text: _react2.default.PropTypes.string
+	};
+
 	exports.default = NavigationItem;
 
 /***/ },
-/* 18 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1156,6 +1614,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	 * Slider which presents the children wrapped under as a drop
+	 *
+	 */
 	var DropdownSlider = function (_React$Component) {
 	  _inherits(DropdownSlider, _React$Component);
 
@@ -1210,12 +1672,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      var draw = this.props.draw;
-	      // const sliderTransform = draw === true ? '0' : '-100%';
 
 	      var drawnClass = draw ? 'dropdown-slider--drawn' : '';
 	      var styles = {
 	        height: draw ? this.state.fullHeight + 'px' : 0
 	      };
+
+	      var childElement = _react2.default.Children.only(this.props.children);
+	      childElement = _react2.default.cloneElement(childElement, { childFocus: this.props.focusChild });
 
 	      return _react2.default.createElement(
 	        'div',
@@ -1231,7 +1695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(
 	          'div',
 	          { ref: this.setSliderElement, style: styles, className: 'dropdown-slider--children' },
-	          this.props.children
+	          childElement
 	        )
 	      );
 	    }
@@ -1239,6 +1703,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  return DropdownSlider;
 	}(_react2.default.Component);
+
+	DropdownSlider.propTypes = {
+	  title: _react2.default.PropTypes.string,
+	  children: _react2.default.PropTypes.element.isRequired,
+	  handleClick: _react2.default.PropTypes.func,
+	  focusChild: _react2.default.PropTypes.bool,
+	  draw: _react2.default.PropTypes.bool
+	};
 
 	exports.default = DropdownSlider;
 

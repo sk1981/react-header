@@ -29,6 +29,7 @@
             <li><a href="#using">Using library</a></li>
             <li><a href="#basic">Basic Usage</a></li>
             <li><a href="#styling">Styling Header</a></li>
+            <li><a href="#sticky">Sticky Headers</a></li>
         </ul>
     </nav>
 </header>
@@ -147,8 +148,41 @@ $header-font-color: #66757f;
             </code></pre>
         </p>
     </section>
-    <section>
-        <h1>HoC (TBA)</h1>
+    <p>
+        <h1 id="sticky">Sticky Headers</h1>
+        <p>
+            There are couple of Higher order components which can be used to change the default behaviour of the Headers.
+            <ul>
+                <li>StickyHeader: This header can be used to make a header which is fixed to the top</li>
+                <li>StickyOnScrollUpHeader: This header can be used to create a header which appears only on scroll up, but disappears as we scroll down</li>
+            </ul>
+        </p>
+        <p>
+        <h3>Example</h3>
+        <p>Link to actual example is : <a target="_blank" href="./sticky-header">Sticky on Scroll Header Example</a></p>
+        <pre class="language-jsx"><code class="language-jsx">
+import {render} from 'react-dom';
+import React from 'react';
+import Logo from './Logo.js';
+import NavigationList from './navigation/NavigationList';
+import NavigationItem from './navigation/NavigationItem';
+import StickyOnScrollUpHeader from './header/StickyOnScrollUpHeader.js'
+
+const header = (
+  &lt;StickyOnScrollUpHeader&gt;
+    &lt;Logo title=&quot;My Logo&quot; link=&quot;http://testing.com&quot; /&gt;
+    &lt;NavigationList&gt;
+      &lt;NavigationItem link=&quot;#home&quot; text=&quot;Home&quot;/&gt;
+      &lt;NavigationItem text=&quot;Team&quot;&gt;
+      &lt;NavigationItem link=&quot;#contact&quot; text=&quot;Contact&quot;/&gt;
+      &lt;NavigationItem link=&quot;#&quot; text=&quot;About Us&quot;/&gt;
+    &lt;/NavigationList&gt;
+  &lt;/StickyOnScrollUpHeader&gt;
+);
+
+render(header, document.getElementById('header'));
+        </code></pre>
+        </p>
     </section>
     <section>
         <h1>Events (TBA)</h1>

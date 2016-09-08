@@ -54,8 +54,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(5);
-	module.exports = __webpack_require__(6);
+	__webpack_require__(6);
+	module.exports = __webpack_require__(7);
 
 
 /***/ },
@@ -78,7 +78,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
 /***/ },
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -125,7 +126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	(0, _reactDom.render)(header, document.getElementById('header'));
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

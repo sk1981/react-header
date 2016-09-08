@@ -17,7 +17,8 @@ module.exports = {
   },
   entry: {
     'build/basic/app': ['./basic/index.js'],
-    'build/styling/app': ['./styling/index.js', './styling/main-light.scss']
+    'build/styling/app': ['./styling/index.js', './styling/main-light.scss'],
+    'build/sticky-header/app': ['./sticky-header/index.js']
   },
   externals: {
     "react": "React",

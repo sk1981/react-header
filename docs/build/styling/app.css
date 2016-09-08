@@ -12,6 +12,9 @@
  * Navigation related CSS properties
  */
 /**
+ * Colour palettes
+ */
+/**
  * Breakpoints
  */
 /**
@@ -49,7 +52,9 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent; }
 
 a {
   text-decoration: none; }
@@ -100,14 +105,14 @@ a {
     top: 4px; }
 
 .dropdown-slider--children {
-  display: none;
-  transition: -webkit-transform 0.5s;
-  transition: transform 0.5s;
-  transition: transform 0.5s, -webkit-transform 0.5s;
+  transition: all 0.5s;
   position: absolute;
-  top: 100%; }
-  .dropdown-slider--drawn .dropdown-slider--children {
-    display: block; }
+  top: 100%;
+  visibility: hidden;
+  overflow: hidden; }
+  .dropdown-slider--drawn
+.dropdown-slider--children {
+    visibility: visible; }
 
 .dropdown-slider--caret {
   display: inline-block;
@@ -160,6 +165,14 @@ a {
 .header-top-bar {
   z-index: 10000; }
 
+.sticky-header {
+  position: fixed;
+  top: 0;
+  width: 100%; }
+
+.sticky-scrollup-header {
+  transition: all 0.5s; }
+
 .site-nav__item {
   border-bottom: 1px solid #d9dbdc;
   cursor: pointer;
@@ -171,7 +184,8 @@ a {
 
 .site-nav__item-link {
   padding: 10px 25px;
-  display: inline-block; }
+  display: inline-block;
+  margin-left: 5px; }
 
 .vertical-slider__back,
 .dropdown-slider__title,
@@ -228,4 +242,4 @@ body {
   height: 200vh; }
 
 body {
-  background-color: #ffffff; }
+  background-color: #ddd5d5; }
