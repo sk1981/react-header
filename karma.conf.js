@@ -1,43 +1,13 @@
 var webpackConfig = require('./webpack-config.test');
 
-// module.exports = function (config) {
-//   config.set({
-//     browsers: [ 'PhantomJS' ],
-//     singleRun: true,
-//     frameworks: [ 'mocha', 'chai',
-//       // 'sinon', 'sinon-chai'
-//     ],
-//     files: [
-//       'tests.webpack.js'
-//     ],
-//     plugins: [
-//       'karma-chai',
-//       'karma-mocha',
-//       // 'karma-sourcemap-loader',
-//       'karma-webpack',
-//       'karma-mocha-reporter',
-//       // 'karma-sinon',
-//       // 'karma-sinon-chai'
-//     ],
-//     preprocessors: {
-//       'webpack-config.test.js': [ 'webpack' ]
-//     },
-//     reporters: [ 'mocha' ],
-//     webpack: webpackConfig,
-//     webpackServer: {
-//       noInfo: true
-//     },
-//     autoWatch: true
-//   });
-// };
-
 module.exports = (config) => {
   config.set({
     frameworks: ['mocha'],
     browsers: ['PhantomJS'],
     reporters: [
       'progress',
-      'coverage'
+      'coverage',
+      'spec'
     ],
     files: [
       './test/**/*spec.js'
@@ -61,8 +31,10 @@ module.exports = (config) => {
     plugins: [
       'karma-webpack',
       'karma-mocha',
+      'karma-spec-reporter',
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
+      'karma-jsdom-launcher',
       'karma-coverage'
     ],
     remapIstanbulReporter: { // fixme
@@ -72,4 +44,4 @@ module.exports = (config) => {
       }
     }
   })
-}
+};

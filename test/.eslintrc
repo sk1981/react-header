@@ -1,0 +1,25 @@
+{
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "commonjs": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "no-console": 1,
+    "react/jsx-uses-vars": 1,
+    "react/jsx-uses-react": 2,
+    "react/prop-types": 1
+  }
+}
