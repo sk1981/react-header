@@ -1,8 +1,15 @@
 /**
+ * Colour palettes
+ */
+$main-color: #d1d1d1 !default;
+$secondary-color: #363d45 !default;
+$main-height: 60px !default;
+
+/**
  * Breakpoints
  */
 // Breakpoint for mobile vs desktop
-$mobile-breakpoint: 600px;
+$mobile-breakpoint: 1024px !default;
 
 /**
  *  All zindexes-used
@@ -13,45 +20,45 @@ $header-z-index: 10000;
 /**
  * Header variables
  */
-$header-height: 60px;
 // background color for header
-$header-bg-color: #363d45;
+$header-bg-color: $secondary-color !default;
 // Default color for header components
-$header-font-color: #d1d1d1;
+$header-font-color: $main-color !default;
+$header-height: $main-height !default;
 // Spacing around headers
-$header-spacing-hz: 10px;
-$header-spacing-vt: 0;
-$header-spacing: $header-spacing-vt $header-spacing-hz;
+$header-spacing-hz: 10px !default;
+$header-spacing-vt: 0 !default;
+$header-spacing: $header-spacing-vt $header-spacing-hz !default;
 
 /**
  * Logo variables
  */
 // logo size
-$header-logos-size: 30px;
+$header-logos-size: 30px !default;
 // logo color
-$header-logo-color: #f68300;
+$header-logo-color: #f68300 !default;
 
 /**
  * Properties related to the toggle icons
  */
 // Color of the "navigation" open icon
-$toggle-open-icon-color: $header-font-color;
+$toggle-open-icon-color: $header-font-color !default;
 // Color of the "navigation" close icon
-$toggle-close-icon-color: $header-font-color;
-$toggle-icon-size: 25px;
-$toggle-icon-family: sans-serif;
+$toggle-close-icon-color: $header-font-color !default;
+$toggle-icon-size: 25px !default;
+$toggle-icon-family: sans-serif !default;
 
 /**
  * Navigation related CSS properties
  */
-$nav-item-spacing-hz: 25px;
-$nav-item-spacing-vt: 10px;
-$nav-item-spacing: $nav-item-spacing-vt $nav-item-spacing-hz;
-$nav-item-color: $header-font-color;
-$nav-item-outline: $nav-item-color;
-$nav-item-border-color: $nav-item-color;
+$nav-item-spacing-hz: 25px !default;
+$nav-item-spacing-vt: 10px !default;
+$nav-item-spacing: $nav-item-spacing-vt $nav-item-spacing-hz !default;
+$nav-item-color: $header-font-color !default;
+$nav-item-outline: $nav-item-color !default;
+$nav-item-border-color: $nav-item-color !default;
 
-$sub-nav-bg-color: $header-bg-color;
-$sub-nav-shadow-color: #333333;
-$sub-nav-item-hover-color: darken($nav-item-color, 20);
-$sub-nav-item-hover-bg-color: lighten($sub-nav-bg-color, 20);
+$sub-nav-bg-color: $header-bg-color !default;
+$sub-nav-shadow-color: #333333 !default;
+$sub-nav-item-hover-color: darken($nav-item-color, 20) !default;
+$sub-nav-item-hover-bg-color: lighten($sub-nav-bg-color, 20) !default;
