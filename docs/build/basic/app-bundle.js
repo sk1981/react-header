@@ -76,27 +76,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	var header = _react2.default.createElement(
 	  _reactHeader.Header,
 	  null,
-	  _react2.default.createElement(_reactHeader.Logo, { title: 'My Logo', link: 'http://testing.com' }),
+	  _react2.default.createElement(_reactHeader.Logo, { title: 'React Header', link: 'https://github.com/sk1981/react-header' }),
 	  _react2.default.createElement(
 	    _reactHeader.NavigationList,
 	    null,
 	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#home', text: 'Home' }),
 	    _react2.default.createElement(
 	      _reactHeader.NavigationItem,
-	      { text: 'Team' },
+	      { text: 'Examples' },
 	      _react2.default.createElement(
 	        _reactHeader.NavigationList,
 	        null,
-	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#local', text: 'Local' }),
-	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Remote' }),
-	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Desktop' }),
-	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Train' })
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '/react-header/docs/styling/', text: 'Styling' }),
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '/react-header/docs/sticky-header/', text: 'Sticky Header' }),
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#dummy', text: 'Dummy' }),
+	        _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'Self' })
 	      )
 	    ),
-	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#contact', text: 'Contact' }),
-	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#', text: 'About Us' })
-	  ),
-	  _react2.default.createElement('input', { type: 'search', placeholder: 'Search...' })
+	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '#dummy', text: 'Dummy' }),
+	    _react2.default.createElement(_reactHeader.NavigationItem, { link: '/react-header/docs', text: 'Documentation' })
+	  )
 	);
 
 	(0, _reactDom.render)(header, document.getElementById('header'));

@@ -101,25 +101,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	var header = _react2.default.createElement(
 	  Header,
 	  null,
-	  _react2.default.createElement(Logo, { title: 'My Logo', link: 'http://testing.com' }),
+	  _react2.default.createElement(Logo, { title: 'React Header', link: 'https://github.com/sk1981/react-header' }),
 	  _react2.default.createElement(
 	    NavigationList,
 	    null,
 	    _react2.default.createElement(NavigationItem, { link: '#home', text: 'Home' }),
 	    _react2.default.createElement(
 	      NavigationItem,
-	      { text: 'Team' },
+	      { text: 'Examples' },
 	      _react2.default.createElement(
 	        NavigationList,
 	        null,
-	        _react2.default.createElement(NavigationItem, { link: '#local', text: 'Local' }),
-	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Remote' }),
-	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Desktop' }),
-	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Train' })
+	        _react2.default.createElement(NavigationItem, { link: '/react-header/docs/basic/', text: 'Basic Header' }),
+	        _react2.default.createElement(NavigationItem, { link: '/react-header/docs/styling/', text: 'Styling a header' }),
+	        _react2.default.createElement(NavigationItem, { link: '#dummy', text: 'Dummy' }),
+	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Self' })
 	      )
 	    ),
-	    _react2.default.createElement(NavigationItem, { link: '#contact', text: 'Contact' }),
-	    _react2.default.createElement(NavigationItem, { link: '#', text: 'About Us' })
+	    _react2.default.createElement(NavigationItem, { link: '#dummy', text: 'Dummy' }),
+	    _react2.default.createElement(NavigationItem, { link: '/react-header/docs', text: 'Documentation' })
 	  )
 	);
 

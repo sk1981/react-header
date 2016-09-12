@@ -4,21 +4,20 @@ import {Logo, NavigationList, NavigationItem, Header} from "react-header";
 
 const header = (
   <Header>
-    <Logo title="My Logo" link="http://testing.com" />
+    <Logo title="React Header" link="https://github.com/sk1981/react-header" />
     <NavigationList>
       <NavigationItem link="#home" text="Home"/>
-      <NavigationItem text="Team">
+      <NavigationItem text="Examples">
         <NavigationList>
-          <NavigationItem link="#local" text="Local"/>
-          <NavigationItem link="#" text="Remote"/>
-          <NavigationItem link="#" text="Desktop"/>
-          <NavigationItem link="#" text="Train"/>
+          <NavigationItem link="/react-header/docs/styling/" text="Styling"/>
+          <NavigationItem link="/react-header/docs/sticky-header/" text="Sticky Header"/>
+          <NavigationItem link="#dummy" text="Dummy"/>
+          <NavigationItem link="#" text="Self"/>
         </NavigationList>
       </NavigationItem>
-      <NavigationItem link="#contact" text="Contact"/>
-      <NavigationItem link="#" text="About Us"/>
+      <NavigationItem link="#dummy" text="Dummy"/>
+      <NavigationItem link="/react-header/docs" text="Documentation"/>
     </NavigationList>
-    <input type="search" placeholder="Search..."/>
   </Header>
 );
 
