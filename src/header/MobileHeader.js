@@ -46,9 +46,7 @@ const MobileHeader = (props) => {
   };
   const childComponents = getChildComponents(childArray, sizeProps);
   return (
-      <VerticalSlider mode={props.mode}
-                      {...sizeProps}
-                      titleComponent={titleComponent}>
+      <VerticalSlider {...sizeProps} titleComponent={titleComponent}>
         {childComponents}
       </VerticalSlider>
   );

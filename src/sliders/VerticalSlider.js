@@ -49,11 +49,19 @@ class VerticalSlider extends React.Component {
   }
 
   /**
-   * Opens the slider
+   * Toggles the slider
    */
   drawSlider() {
+    this.updateSliderDraw(!this.state.draw);
+  }
+
+  /**
+   * Updates the draw state of the slider by changing the state
+   * @param draw
+   */
+  updateSliderDraw(draw) {
     this.setState({
-      draw: !this.state.draw
+      draw: draw
     });
   }
 
@@ -65,13 +73,21 @@ class VerticalSlider extends React.Component {
    * @param clickEvent
    */
   handleDocumentClickEvent(clickEvent) {
-    const target = clickEvent.target;
-    if (this.sliderElement.contains && !this.sliderElement.contains(target)) {
-      this.setState({
-        draw: false
-      });
+    if(this.state.draw) {
+      const target = clickEvent.target;
+      if (this.sliderElement.contains) {
+        // If click outside slider close it
+        if (!this.sliderElement.contains(target)) {
+          this.updateSliderDraw(false);
+        } else {
+          // If a link tag is clicked, close the slider
+          // TODO : Replace with a close event which is propagated down
+          if(target.tagName.toLowerCase() === 'a' && target.href) {
+            this.updateSliderDraw(false);
+          }
+        }
+      }
     }
-
   }
 
   /**
@@ -161,7 +177,7 @@ VerticalSlider.propTypes = {
   children: React.PropTypes.oneOfType([
     React.PropTypes.element,
     React.PropTypes.array
-  ]),
+  ]).isRequired,
   windowWidth: React.PropTypes.number,
   windowHeight: React.PropTypes.number,
   headerHeight: React.PropTypes.number,

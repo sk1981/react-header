@@ -7,35 +7,40 @@ import KeyEvents from '../events/KeyEvents';
  * On the other hand for sub menu, it is a dropdown and we navigate by
  * using up and down keys
  */
-
-
-/**
- * Helper for sub menus
- *
- * @type {{class: string, nextKeyCode: number, previousKeyCode: number}}
- */
-const SubListHelper = {
-  class: 'site-nav__list--sub',
-  nextKeyCode: KeyEvents.CODE.DOWN, // sublist we use down to move to next
-  previousKeyCode: KeyEvents.CODE.UP // sublist we use up to move to previous
+const createListHelper = function(nextKey, previousKey, className) {
+  return {
+    className,
+    nextKey,
+    previousKey,
+    getChange(keyCode) {
+      if(keyCode === this.nextKey) {
+        return 1;
+      } else if(keyCode === this.previousKey) {
+        return -1;
+      }
+    },
+    canHandleEvent(keyCode) {
+      return keyCode === this.nextKey || keyCode === this.previousKey;
+    }
+  }
 };
 
 /**
- * Help for main menu
- *
- * @type {{class: string, nextKeyCode: number, previousKeyCode: number}}
+ * Helper for sub menu
  */
-const MainListHelper = {
-  class: 'site-nav__list--main',
-  nextKeyCode: KeyEvents.CODE.RIGHT, // mainlist - we use right for next
-  previousKeyCode: KeyEvents.CODE.LEFT // mainlist - we use left for next
-};
+const SubListHelper = createListHelper(KeyEvents.CODE.DOWN, KeyEvents.CODE.UP, 'site-nav__list--sub');
+
+/**
+ * Helper for main menu
+ */
+const MainListHelper = createListHelper(KeyEvents.CODE.RIGHT, KeyEvents.CODE.LEFT, 'site-nav__list--main');
 
 /**
  * Gets the helper base of type of menu
  *
+ *
  * @param isMainMenu
- * @returns {{class: string, nextKeyCode: number, previousKeyCode: number}}
+ * @returns {{className, nextKey, previousKey, getChange, canHandleEvent}}
  */
 export function getListHelper(isMainMenu) {
   return isMainMenu === true ? MainListHelper: SubListHelper;

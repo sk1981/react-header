@@ -4,7 +4,6 @@ import VerticalSlider from '../sliders/VerticalSlider';
 import KeyEvents from '../events/KeyEvents';
 
 // Get the open close key events
-const NAVIGATION_KEY_EVENTS = [KeyEvents.CODE.DOWN, KeyEvents.CODE.UP];
 const CLOSE_KEY_EVENTS = [KeyEvents.CODE.ESCAPE, KeyEvents.CODE.UP];
 const OPEN_KEY_EVENTS = [KeyEvents.CODE.ENTER, KeyEvents.CODE.SPACE, KeyEvents.CODE.DOWN];
 const ALL_KEY_EVENTS = [...OPEN_KEY_EVENTS, ...CLOSE_KEY_EVENTS];
@@ -16,54 +15,94 @@ class NavigationItem extends React.Component {
     this.state = {displayChild: false, activeChildIndex: -1};
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.dropdownClicked = this.dropdownClicked.bind(this);
-    this.handleBlurEvent = this.handleBlurEvent.bind(this);
+    this.handleCloseEvent = this.handleCloseEvent.bind(this);
   }
 
-  handleChildKeyEvents(keyEvent) {
-    const keyCode = keyEvent.which;
-    const displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
-    const isNavigationKey = NAVIGATION_KEY_EVENTS.indexOf(keyCode) > -1;
-    const isChangeOfDisplay = displayChild !== this.state.displayChild;
-
-    // Ensure that we focus child only when
-    // 1. We are displaying child i.e displayChild=true
-    // 2. The child was earlier not displayed i.e  isChangeOfDisplay = true
-    // 3. Change was trigger by arrow keys i.e. isNavigationKey = true
-    const focusChild = (isChangeOfDisplay && isNavigationKey && displayChild);// eslint-disable-line
-    const state = {
-      displayChild: displayChild,
-      focusChild: displayChild
-    };
-
-    this.setState(state);
-    keyEvent.preventDefault();
+  /**
+   * This method is to ensure that we are not handling events propagated
+   * to the main menu from the sub menus
+   *
+   * We will be checking the target element here to complete this check.
+   *
+   * We don't want to to stop bubbling from child events (as it events may have other uses)
+   * and we don't want to stop propagation (as we still want default behaviour in some circumstances)
+   *
+   */
+  isCurrentLevelEvent(keyEvent) {
+    // Bubbling can only occur for menus which have sub menus and it can
+    // only happen from titleElement of sub menu
+    return this.subMenuElement === undefined || this.subMenuElement.titleElement === keyEvent.target;
   }
 
+  /**
+   * Handles keydown press for navigation, opening menus etc
+   * @param keyEvent
+   */
   handleKeyDown(keyEvent) {
-    if (keyEvent.isDefaultPrevented()) {
+    if (!this.isCurrentLevelEvent(keyEvent)) {
       return;
     }
-    const keyCode = keyEvent.which;
-    // handle child keyboard navigation keyevents only if children are present
-    if(this.props.children && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
-      this.handleChildKeyEvents(keyEvent);
-    }
-
+    let eventHandled = false;
+    // Pass all events to parent to manage
     if(this.props.onKeyEvent ) {
-      this.props.onKeyEvent(keyEvent, this.props.index, keyCode);
+      eventHandled = this.props.onKeyEvent(keyEvent, this.props.index);
+    }
+    if(!eventHandled) {
+      this.handleSliderKeyEvents(keyEvent);
     }
   }
 
+  handleSliderKeyEvents(keyEvent) {
+    const keyCode = keyEvent.which;
+    if(this.subMenuElement && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
+      const displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
+      const state = {
+        displayChild: displayChild,
+        focusChild: displayChild
+      };
+
+      this.setState(state);
+      keyEvent.preventDefault();
+    }
+  }
+
+  /**
+   * Handles changes in child display
+   *
+   * Also, if display is disabled, 
+   *
+   * @param displayChild
+   */
+  handleChildDisplay(displayChild) {
+    const state = {
+      displayChild: displayChild
+    };
+    if(displayChild === false) {
+      state['focusChild'] = false;
+    }
+
+    this.setState(state)
+  }
+
+  /**
+   * Handles clicking of dropdown by toggling the display of child
+   */
   dropdownClicked() {
-    this.setState({
-      displayChild: !this.state.displayChild
-    });
+    this.handleChildDisplay(!this.state.displayChild)
   }
 
-  handleBlurEvent() {
-    //TODO: Hide on blur ??
+  handleCloseEvent() {
+    this.handleChildDisplay(false);
   }
 
+  /**
+   * Gets the sub menu element by wrapping it on a vertical slider
+   * (smaller screen) or dropdown slider (larger screen)
+   *
+   * @param children
+   * @param props
+   * @returns {XML}
+   */
   getSubMenuElement(children, props) {
     if(props. mode === 'mobile') {
       return <VerticalSlider windowWidth={props.windowWidth}
@@ -75,12 +114,16 @@ class NavigationItem extends React.Component {
     } else {
       return (<DropdownSlider handleClick={this.dropdownClicked}
                               focusChild={this.state.focusChild}
-                              draw= {this.state.displayChild}
+                              handleCloseEvent={this.handleCloseEvent}
+                              draw={this.state.displayChild}
                               ref={(ref) => this.subMenuElement = ref}
                               title={props.text}>{children}</DropdownSlider>);
     }
   }
 
+  /**
+   * One component update is the item is active item, just focus it
+   */
   componentDidUpdate() {
     // not make this nav item focused if child is supposed to be focused
     if(this.props.activeIndex === this.props.index && !this.state.focusChild) {
@@ -104,7 +147,7 @@ class NavigationItem extends React.Component {
     const navigationLink = <a ref={(ref) => this.linkElement = ref} className={`site-nav__item-link`} href={link}>{text}</a>;
     const itemChild = children ? this.getSubMenuElement(children, this.props) : navigationLink;
     return (
-      <li onBlur={this.handleBlurEvent} onKeyDown={this.handleKeyDown} className={`site-nav__item`}>
+      <li ref={(ref) => this.container = ref}  onKeyDown={this.handleKeyDown} className={`site-nav__item`}>
         {itemChild}
       </li>
     );

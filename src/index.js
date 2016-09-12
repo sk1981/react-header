@@ -16,9 +16,9 @@ const header = (
       <NavigationItem text="Team">
         <NavigationList>
           <NavigationItem link="#local" text="Local"/>
-          <NavigationItem link="#" text="Remote"/>
-          <NavigationItem link="#" text="Desktop"/>
-          <NavigationItem link="#" text="Train"/>
+          <NavigationItem link="#remote" text="Remote"/>
+          <NavigationItem link="#desktop" text="Desktop"/>
+          <NavigationItem link="#train" text="Train"/>
         </NavigationList>
       </NavigationItem>
       <NavigationItem link="#contact" text="Contact"/>
