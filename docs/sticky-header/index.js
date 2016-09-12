@@ -10,8 +10,8 @@ const header = (
       <NavigationItem link="#home" text="Home"/>
       <NavigationItem text="Examples">
         <NavigationList>
-          <NavigationItem link="/react-header/docs/basic/" text="Basic Header"/>
-          <NavigationItem link="/react-header/docs/sticky-header/" text="Sticky Header"/>
+          <NavigationItem link="../basic/" text="Basic Header"/>
+          <NavigationItem link="../styling/" text="Styling"/>
           <NavigationItem link="#dummy" text="Dummy"/>
           <NavigationItem link="#" text="Self"/>
         </NavigationList>

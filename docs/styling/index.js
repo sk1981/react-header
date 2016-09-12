@@ -13,8 +13,8 @@ const header = (
       <NavigationItem link="#home" text="Home"/>
       <NavigationItem text="Examples">
         <NavigationList>
-          <NavigationItem link="/react-header/docs/basic/" text="Basic Header"/>
-          <NavigationItem link="/react-header/docs/styling/" text="Styling a header"/>
+          <NavigationItem link="../basic/" text="Basic Header"/>
+          <NavigationItem link="../sticky-header/" text="Sticky Header"/>
           <NavigationItem link="#dummy" text="Dummy"/>
           <NavigationItem link="#" text="Self"/>
         </NavigationList>

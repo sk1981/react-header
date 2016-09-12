@@ -112,8 +112,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _react2.default.createElement(
 	        NavigationList,
 	        null,
-	        _react2.default.createElement(NavigationItem, { link: '/react-header/docs/basic/', text: 'Basic Header' }),
-	        _react2.default.createElement(NavigationItem, { link: '/react-header/docs/styling/', text: 'Styling a header' }),
+	        _react2.default.createElement(NavigationItem, { link: '../basic/', text: 'Basic Header' }),
+	        _react2.default.createElement(NavigationItem, { link: '../sticky-header/', text: 'Sticky Header' }),
 	        _react2.default.createElement(NavigationItem, { link: '#dummy', text: 'Dummy' }),
 	        _react2.default.createElement(NavigationItem, { link: '#', text: 'Self' })
 	      )
