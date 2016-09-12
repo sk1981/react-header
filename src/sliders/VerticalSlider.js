@@ -9,37 +9,43 @@ class VerticalSlider extends React.Component {
     super(props);
     this.state = {draw: false};
     this.drawSlider = this.drawSlider.bind(this);
+    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
   }
 
   /**
-   * Gets the top bar if the title component is defined.
-   * 
-   * If it's not defined, it considers title component to be
-   * absent and does not returns any data
-   * 
+   * Gets the top bar along with the titleComponent
+   *
+   * In general title component should be the same as the logo
+   *
    * @returns {XML}
    */
-  getTopBar() {
-    const {draw} = this.state;
+  getTopBar(isDrawn) {
+    return (
+      <div className="vertical-slider__top">
+        {this.props.titleComponent}
+        <SliderToggle toggleOpen={isDrawn} onSliderToggle={this.drawSlider}/>
+      </div>
+    );
+  }
 
-    if (this.props.titleComponent !== undefined) {
-      return (
-        <div className="vertical-slider__top">
-          {this.props.titleComponent}
-          <SliderToggle toggleOpen={draw} onSliderToggle={this.drawSlider}/>
-        </div>
-      );
-    } else {
-      return <div aria-label="Sub Menu"
-                  aria-haspopup="true"
-                  aria-pressed={`${draw}`}
-                  aria-expanded={`${draw}`}
-                  role="button"
-                  className="vertical-slider__title"
-                  onClick={this.drawSlider}>
+  /**
+   * Gets the sub menu bar which is used for opening the submenu   
+   *
+   * @param isDrawn
+   * @returns {XML}
+   */
+  getSubMenuBar(isDrawn) {
+    return (
+      <div aria-label="Sub Menu"
+           aria-haspopup="true"
+           aria-pressed={`${isDrawn}`}
+           aria-expanded={`${isDrawn}`}
+           role="button"
+           className="vertical-slider__title"
+           onClick={this.drawSlider}>
         {this.props.title}
-      </div>;
-    }
+      </div>
+    );
   }
 
   /**
@@ -49,6 +55,42 @@ class VerticalSlider extends React.Component {
     this.setState({
       draw: !this.state.draw
     });
+  }
+
+  /**
+   * Handles clicks on the document
+   *
+   * Used for closing the slider if the click happens outside the slider container container
+   *
+   * @param clickEvent
+   */
+  handleDocumentClickEvent(clickEvent) {
+    const target = clickEvent.target;
+    if (this.sliderElement.contains && !this.sliderElement.contains(target)) {
+      this.setState({
+        draw: false
+      });
+    }
+
+  }
+
+  /**
+   * Used for registering clicks on document body
+   */
+  componentDidMount() {
+    // Only register for the main slider to avoid extra events
+    if(!this.props.isSubSlider) {
+      document.addEventListener("click", this.handleDocumentClickEvent)
+    }
+  }
+
+  /**
+   * Used for registering clicks on document body
+   */
+  componentWillUnmount() {
+    if(!this.props.isSubSlider) {
+      document.removeEventListener("click", this.handleDocumentClickEvent)
+    }
   }
 
   /**
@@ -103,7 +145,7 @@ class VerticalSlider extends React.Component {
     return (
       <div ref={(ref)=> this.sliderElement = ref}
            className={`vertical-slider ${drawnClass} ${sliderLevelClass}`}>
-        {this.getTopBar()}
+        {isSubSlider ? this.getSubMenuBar(isDrawn): this.getTopBar(isDrawn)}
         <div aria-hidden={!isDrawn} style={childStyles}
              className="vertical-slider--children">
               {this.getSliderChild(isSubSlider, this.props.children)}

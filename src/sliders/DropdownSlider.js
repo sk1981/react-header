@@ -9,13 +9,24 @@ class DropdownSlider extends React.Component {
     super(props);
     this.state = {};
     this.setSliderElement = this.setSliderElement.bind(this);
-    this.drawSlider = this.drawSlider.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleCloseEvent = props.handleCloseEvent;
+    this.handleBlurEvent = this.handleBlurEvent.bind(this);
   }
 
+  /**
+   * Method to be called to focus the element
+   * Expected to called by parent and it ensures that
+   * it is focused by focusing the title element
+   */
   focus() {
     this.titleElement.focus();
   }
 
+  /**
+   * Gets the height of the element
+   * @returns {number}
+   */
   getHeight() {
     // Scroll height gives the correct height even if we have
     // provided a different height and/or have overflow: hidden instead
@@ -23,12 +34,37 @@ class DropdownSlider extends React.Component {
     return this.sliderElement ? this.sliderElement.scrollHeight: 0;
   }
 
+  /**
+   * Sets the slider element on mount and ensures
+   * that the height is pre-calculated
+   *
+   * @param sliderElement
+   */
   setSliderElement(sliderElement) {
     this.sliderElement = sliderElement;
     this.setState({'fullHeight': this.getHeight()})
   }
 
-  drawSlider() {
+  handleBlurEvent(blurEvent) {
+    // Ignore event if child is not displayed
+    if(this.state.displayChild === false) {
+      return;
+    }
+    const currentTarget = blurEvent.currentTarget;
+    setTimeout(() => {
+      // Fire the
+      if (!currentTarget.contains(document.activeElement)) {
+        this.handleCloseEvent(false);
+      }
+    }, 0);
+  }
+
+  /**
+   * Calls method to handle event to draw slider
+   *
+   * Passes to parent for handling the click event
+   */
+  handleClick() {
     if (this.props.handleClick) {
       this.props.handleClick();
     }
@@ -49,10 +85,10 @@ class DropdownSlider extends React.Component {
     };
 
     let childElement = React.Children.only(this.props.children);
-    childElement = React.cloneElement(childElement, {childFocus: this.props.focusChild});
+    childElement = React.cloneElement(childElement, {childFocus: this.props.focusChild, handleCloseEvent: this.handleCloseEvent});
 
     return (
-      <div role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`} aria-haspopup="true" onClick={this.drawSlider} className={`dropdown-slider ${drawnClass}`}>
+      <div onBlur={this.handleBlurEvent} role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`} aria-haspopup="true" onClick={this.handleClick} className={`dropdown-slider ${drawnClass}`}>
         <a className="dropdown-slider__title" ref={(ref) => this.titleElement = ref} tabIndex="0">
           {this.props.title}
           <span className="dropdown-slider--caret"/>
@@ -68,6 +104,7 @@ DropdownSlider.propTypes = {
   title: React.PropTypes.string,
   children: React.PropTypes.element.isRequired,
   handleClick: React.PropTypes.func,
+  handleCloseEvent: React.PropTypes.func,
   focusChild: React.PropTypes.bool,
   draw: React.PropTypes.bool
 };
