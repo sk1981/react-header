@@ -296,9 +296,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var childComponents = getChildComponents(childArray, sizeProps);
 	  return _react2.default.createElement(
 	    _VerticalSlider2.default,
-	    _extends({ mode: props.mode
-	    }, sizeProps, {
-	      titleComponent: titleComponent }),
+	    _extends({}, sizeProps, { titleComponent: titleComponent }),
 	    childComponents
 	  );
 	};
@@ -388,6 +386,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	 * Represents a lit of Navigation Items which are displayed
+	 * as a part of menu
+	 *
+	 */
 	var NavigationList = function (_React$Component) {
 	  _inherits(NavigationList, _React$Component);
 
@@ -403,30 +406,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _createClass(NavigationList, [{
 	    key: 'handleKeyEvent',
-	    value: function handleKeyEvent(keyEvent, index, keyCode) {
+	    value: function handleKeyEvent(keyEvent, index) {
 	      var listHelper = (0, _NavigationListHelper.getListHelper)(this.props.isMainMenu);
+	      return this.handleKeyNavigation(listHelper, keyEvent, index);
+	    }
 
-	      if (listHelper.previousKeyCode !== keyCode && listHelper.nextKeyCode !== keyCode) {
-	        // IF it does not needs to handle the keyCode, then just return
-	        return;
-	      }
+	    /**
+	     * Handles Key navigation
+	     *
+	     * Handles the code used to navigate around
+	     *
+	     * @param listHelper
+	     * @param keyEvent
+	     * @param index
+	     * @returns {boolean}
+	     */
 
-	      // Note that here were are not taking next index from state but from the argument
-	      // To use state, we would need to ensure that the state value is tracked properly and
-	      // our component is notified of any focus/blur events caused due to clicks outside
-	      var newActiveIndex = -1;
+	  }, {
+	    key: 'handleKeyNavigation',
+	    value: function handleKeyNavigation(listHelper, keyEvent, index) {
+	      var keyCode = keyEvent.which;
 
-	      if (listHelper.previousKeyCode === keyCode) {
-	        newActiveIndex = index - 1;
-	      } else if (listHelper.nextKeyCode === keyCode) {
-	        newActiveIndex = index + 1;
+	      var handledEvent = false;
+	      if (listHelper.canHandleEvent(keyCode)) {
+	        var newActiveIndex = index + listHelper.getChange(keyCode);
+	        if (newActiveIndex >= -1 && newActiveIndex < this.props.children.length) {
+	          this.setState({
+	            activeIndex: newActiveIndex
+	          });
+	          // prevent default so that the default behaviour like down key
+	          // shifting the page down does not happens
+	          keyEvent.preventDefault();
+	        }
+	        // If no child element is active, this means call any close event handler, if defined.
+	        if (newActiveIndex === -1 && this.props.handleCloseEvent) {
+	          this.props.handleCloseEvent();
+	        }
+	        handledEvent = true;
 	      }
-	      if (newActiveIndex > -1 && newActiveIndex < this.props.children.length) {
-	        this.setState({
-	          activeIndex: newActiveIndex
-	        });
-	        keyEvent.preventDefault();
-	      }
+	      return handledEvent;
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -454,7 +472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var childProps = { windowWidth: windowWidth, windowHeight: windowHeight, activeIndex: activeIndex, mode: mode, headerHeight: headerHeight, onKeyEvent: this.handleKeyEvent };
 	      return _react2.default.createElement(
 	        'ul',
-	        { className: 'site-nav__list ' + listHelper.class },
+	        { className: 'site-nav__list ' + listHelper.className },
 	        _ReactHelper2.default.addPropsToChildren(children, childProps, true)
 	      );
 	    }
@@ -469,6 +487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  windowWidth: _react2.default.PropTypes.number,
 	  windowHeight: _react2.default.PropTypes.number,
 	  headerHeight: _react2.default.PropTypes.number,
+	  handleCloseEvent: _react2.default.PropTypes.func,
 	  mode: _react2.default.PropTypes.oneOf(['desktop', 'mobile'])
 	};
 
@@ -604,34 +623,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * On the other hand for sub menu, it is a dropdown and we navigate by
 	 * using up and down keys
 	 */
-
-	/**
-	 * Helper for sub menus
-	 *
-	 * @type {{class: string, nextKeyCode: number, previousKeyCode: number}}
-	 */
-	var SubListHelper = {
-	  class: 'site-nav__list--sub',
-	  nextKeyCode: _KeyEvents2.default.CODE.DOWN, // sublist we use down to move to next
-	  previousKeyCode: _KeyEvents2.default.CODE.UP // sublist we use up to move to previous
+	var createListHelper = function createListHelper(nextKey, previousKey, className) {
+	  return {
+	    className: className,
+	    nextKey: nextKey,
+	    previousKey: previousKey,
+	    getChange: function getChange(keyCode) {
+	      if (keyCode === this.nextKey) {
+	        return 1;
+	      } else if (keyCode === this.previousKey) {
+	        return -1;
+	      }
+	    },
+	    canHandleEvent: function canHandleEvent(keyCode) {
+	      return keyCode === this.nextKey || keyCode === this.previousKey;
+	    }
+	  };
 	};
 
 	/**
-	 * Help for main menu
-	 *
-	 * @type {{class: string, nextKeyCode: number, previousKeyCode: number}}
+	 * Helper for sub menu
 	 */
-	var MainListHelper = {
-	  class: 'site-nav__list--main',
-	  nextKeyCode: _KeyEvents2.default.CODE.RIGHT, // mainlist - we use right for next
-	  previousKeyCode: _KeyEvents2.default.CODE.LEFT // mainlist - we use left for next
-	};
+	var SubListHelper = createListHelper(_KeyEvents2.default.CODE.DOWN, _KeyEvents2.default.CODE.UP, 'site-nav__list--sub');
+
+	/**
+	 * Helper for main menu
+	 */
+	var MainListHelper = createListHelper(_KeyEvents2.default.CODE.RIGHT, _KeyEvents2.default.CODE.LEFT, 'site-nav__list--main');
 
 	/**
 	 * Gets the helper base of type of menu
 	 *
+	 *
 	 * @param isMainMenu
-	 * @returns {{class: string, nextKeyCode: number, previousKeyCode: number}}
+	 * @returns {{className, nextKey, previousKey, getChange, canHandleEvent}}
 	 */
 	function getListHelper(isMainMenu) {
 	  return isMainMenu === true ? MainListHelper : SubListHelper;
@@ -702,57 +727,127 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this.state = { draw: false };
 	    _this.drawSlider = _this.drawSlider.bind(_this);
+	    _this.handleDocumentClickEvent = _this.handleDocumentClickEvent.bind(_this);
 	    return _this;
 	  }
 
 	  /**
-	   * Gets the top bar if the title component is defined.
-	   * 
-	   * If it's not defined, it considers title component to be
-	   * absent and does not returns any data
-	   * 
+	   * Gets the top bar along with the titleComponent
+	   *
+	   * In general title component should be the same as the logo
+	   *
 	   * @returns {XML}
 	   */
 
 
 	  _createClass(VerticalSlider, [{
 	    key: 'getTopBar',
-	    value: function getTopBar() {
-	      var draw = this.state.draw;
-
-
-	      if (this.props.titleComponent !== undefined) {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'vertical-slider__top' },
-	          this.props.titleComponent,
-	          _react2.default.createElement(_SliderToggle2.default, { toggleOpen: draw, onSliderToggle: this.drawSlider })
-	        );
-	      } else {
-	        return _react2.default.createElement(
-	          'div',
-	          { 'aria-label': 'Sub Menu',
-	            'aria-haspopup': 'true',
-	            'aria-pressed': '' + draw,
-	            'aria-expanded': '' + draw,
-	            role: 'button',
-	            className: 'vertical-slider__title',
-	            onClick: this.drawSlider },
-	          this.props.title
-	        );
-	      }
+	    value: function getTopBar(isDrawn) {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'vertical-slider__top' },
+	        this.props.titleComponent,
+	        _react2.default.createElement(_SliderToggle2.default, { toggleOpen: isDrawn, onSliderToggle: this.drawSlider })
+	      );
 	    }
 
 	    /**
-	     * Opens the slider
+	     * Gets the sub menu bar which is used for opening the submenu   
+	     *
+	     * @param isDrawn
+	     * @returns {XML}
+	     */
+
+	  }, {
+	    key: 'getSubMenuBar',
+	    value: function getSubMenuBar(isDrawn) {
+	      return _react2.default.createElement(
+	        'div',
+	        { 'aria-label': 'Sub Menu',
+	          'aria-haspopup': 'true',
+	          'aria-pressed': '' + isDrawn,
+	          'aria-expanded': '' + isDrawn,
+	          role: 'button',
+	          className: 'vertical-slider__title',
+	          onClick: this.drawSlider },
+	        this.props.title
+	      );
+	    }
+
+	    /**
+	     * Toggles the slider
 	     */
 
 	  }, {
 	    key: 'drawSlider',
 	    value: function drawSlider() {
+	      this.updateSliderDraw(!this.state.draw);
+	    }
+
+	    /**
+	     * Updates the draw state of the slider by changing the state
+	     * @param draw
+	     */
+
+	  }, {
+	    key: 'updateSliderDraw',
+	    value: function updateSliderDraw(draw) {
 	      this.setState({
-	        draw: !this.state.draw
+	        draw: draw
 	      });
+	    }
+
+	    /**
+	     * Handles clicks on the document
+	     *
+	     * Used for closing the slider if the click happens outside the slider container container
+	     *
+	     * @param clickEvent
+	     */
+
+	  }, {
+	    key: 'handleDocumentClickEvent',
+	    value: function handleDocumentClickEvent(clickEvent) {
+	      if (this.state.draw) {
+	        var target = clickEvent.target;
+	        if (this.sliderElement.contains) {
+	          // If click outside slider close it
+	          if (!this.sliderElement.contains(target)) {
+	            this.updateSliderDraw(false);
+	          } else {
+	            // If a link tag is clicked, close the slider
+	            // TODO : Replace with a close event which is propagated down
+	            if (target.tagName.toLowerCase() === 'a' && target.href) {
+	              this.updateSliderDraw(false);
+	            }
+	          }
+	        }
+	      }
+	    }
+
+	    /**
+	     * Used for registering clicks on document body
+	     */
+
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // Only register for the main slider to avoid extra events
+	      if (!this.props.isSubSlider) {
+	        document.addEventListener("click", this.handleDocumentClickEvent);
+	      }
+	    }
+
+	    /**
+	     * Used for registering clicks on document body
+	     */
+
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (!this.props.isSubSlider) {
+	        document.removeEventListener("click", this.handleDocumentClickEvent);
+	      }
 	    }
 
 	    /**
@@ -827,7 +922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return _this2.sliderElement = _ref;
 	          },
 	          className: 'vertical-slider ' + drawnClass + ' ' + sliderLevelClass },
-	        this.getTopBar(),
+	        isSubSlider ? this.getSubMenuBar(isDrawn) : this.getTopBar(isDrawn),
 	        _react2.default.createElement(
 	          'div',
 	          { 'aria-hidden': !isDrawn, style: childStyles,
@@ -844,7 +939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	VerticalSlider.propTypes = {
 	  titleComponent: _react2.default.PropTypes.element,
 	  title: _react2.default.PropTypes.string,
-	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.element, _react2.default.PropTypes.array]),
+	  children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.element, _react2.default.PropTypes.array]).isRequired,
 	  windowWidth: _react2.default.PropTypes.number,
 	  windowHeight: _react2.default.PropTypes.number,
 	  headerHeight: _react2.default.PropTypes.number,
@@ -1432,7 +1527,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	// Get the open close key events
-	var NAVIGATION_KEY_EVENTS = [_KeyEvents2.default.CODE.DOWN, _KeyEvents2.default.CODE.UP];
 	var CLOSE_KEY_EVENTS = [_KeyEvents2.default.CODE.ESCAPE, _KeyEvents2.default.CODE.UP];
 	var OPEN_KEY_EVENTS = [_KeyEvents2.default.CODE.ENTER, _KeyEvents2.default.CODE.SPACE, _KeyEvents2.default.CODE.DOWN];
 	var ALL_KEY_EVENTS = [].concat(OPEN_KEY_EVENTS, CLOSE_KEY_EVENTS);
@@ -1448,59 +1542,111 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.state = { displayChild: false, activeChildIndex: -1 };
 	    _this.handleKeyDown = _this.handleKeyDown.bind(_this);
 	    _this.dropdownClicked = _this.dropdownClicked.bind(_this);
-	    _this.handleBlurEvent = _this.handleBlurEvent.bind(_this);
+	    _this.handleCloseEvent = _this.handleCloseEvent.bind(_this);
 	    return _this;
 	  }
 
+	  /**
+	   * This method is to ensure that we are not handling events propagated
+	   * to the main menu from the sub menus
+	   *
+	   * We will be checking the target element here to complete this check.
+	   *
+	   * We don't want to to stop bubbling from child events (as it events may have other uses)
+	   * and we don't want to stop propagation (as we still want default behaviour in some circumstances)
+	   *
+	   */
+
+
 	  _createClass(NavigationItem, [{
-	    key: 'handleChildKeyEvents',
-	    value: function handleChildKeyEvents(keyEvent) {
-	      var keyCode = keyEvent.which;
-	      var displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
-	      var isNavigationKey = NAVIGATION_KEY_EVENTS.indexOf(keyCode) > -1;
-	      var isChangeOfDisplay = displayChild !== this.state.displayChild;
-
-	      // Ensure that we focus child only when
-	      // 1. We are displaying child i.e displayChild=true
-	      // 2. The child was earlier not displayed i.e  isChangeOfDisplay = true
-	      // 3. Change was trigger by arrow keys i.e. isNavigationKey = true
-	      var focusChild = isChangeOfDisplay && isNavigationKey && displayChild; // eslint-disable-line
-	      var state = {
-	        displayChild: displayChild,
-	        focusChild: displayChild
-	      };
-
-	      this.setState(state);
-	      keyEvent.preventDefault();
+	    key: 'isCurrentLevelEvent',
+	    value: function isCurrentLevelEvent(keyEvent) {
+	      // Bubbling can only occur for menus which have sub menus and it can
+	      // only happen from titleElement of sub menu
+	      return this.subMenuElement === undefined || this.subMenuElement.titleElement === keyEvent.target;
 	    }
+
+	    /**
+	     * Handles keydown press for navigation, opening menus etc
+	     * @param keyEvent
+	     */
+
 	  }, {
 	    key: 'handleKeyDown',
 	    value: function handleKeyDown(keyEvent) {
-	      if (keyEvent.isDefaultPrevented()) {
+	      if (!this.isCurrentLevelEvent(keyEvent)) {
 	        return;
 	      }
-	      var keyCode = keyEvent.which;
-	      // handle child keyboard navigation keyevents only if children are present
-	      if (this.props.children && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
-	        this.handleChildKeyEvents(keyEvent);
-	      }
-
+	      var eventHandled = false;
+	      // Pass all events to parent to manage
 	      if (this.props.onKeyEvent) {
-	        this.props.onKeyEvent(keyEvent, this.props.index, keyCode);
+	        eventHandled = this.props.onKeyEvent(keyEvent, this.props.index);
+	      }
+	      if (!eventHandled) {
+	        this.handleSliderKeyEvents(keyEvent);
 	      }
 	    }
+	  }, {
+	    key: 'handleSliderKeyEvents',
+	    value: function handleSliderKeyEvents(keyEvent) {
+	      var keyCode = keyEvent.which;
+	      if (this.subMenuElement && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
+	        var displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
+	        var state = {
+	          displayChild: displayChild,
+	          focusChild: displayChild
+	        };
+
+	        this.setState(state);
+	        keyEvent.preventDefault();
+	      }
+	    }
+
+	    /**
+	     * Handles changes in child display
+	     *
+	     * Also, if display is disabled, 
+	     *
+	     * @param displayChild
+	     */
+
+	  }, {
+	    key: 'handleChildDisplay',
+	    value: function handleChildDisplay(displayChild) {
+	      var state = {
+	        displayChild: displayChild
+	      };
+	      if (displayChild === false) {
+	        state['focusChild'] = false;
+	      }
+
+	      this.setState(state);
+	    }
+
+	    /**
+	     * Handles clicking of dropdown by toggling the display of child
+	     */
+
 	  }, {
 	    key: 'dropdownClicked',
 	    value: function dropdownClicked() {
-	      this.setState({
-	        displayChild: !this.state.displayChild
-	      });
+	      this.handleChildDisplay(!this.state.displayChild);
 	    }
 	  }, {
-	    key: 'handleBlurEvent',
-	    value: function handleBlurEvent() {
-	      //TODO: Hide on blur ??
+	    key: 'handleCloseEvent',
+	    value: function handleCloseEvent() {
+	      this.handleChildDisplay(false);
 	    }
+
+	    /**
+	     * Gets the sub menu element by wrapping it on a vertical slider
+	     * (smaller screen) or dropdown slider (larger screen)
+	     *
+	     * @param children
+	     * @param props
+	     * @returns {XML}
+	     */
+
 	  }, {
 	    key: 'getSubMenuElement',
 	    value: function getSubMenuElement(children, props) {
@@ -1522,6 +1668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _DropdownSlider2.default,
 	          { handleClick: this.dropdownClicked,
 	            focusChild: this.state.focusChild,
+	            handleCloseEvent: this.handleCloseEvent,
 	            draw: this.state.displayChild,
 	            ref: function ref(_ref) {
 	              return _this2.subMenuElement = _ref;
@@ -1531,6 +1678,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        );
 	      }
 	    }
+
+	    /**
+	     * One component update is the item is active item, just focus it
+	     */
+
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
@@ -1570,7 +1722,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var itemChild = children ? this.getSubMenuElement(children, this.props) : navigationLink;
 	      return _react2.default.createElement(
 	        'li',
-	        { onBlur: this.handleBlurEvent, onKeyDown: this.handleKeyDown, className: 'site-nav__item' },
+	        { ref: function ref(_ref3) {
+	            return _this3.container = _ref3;
+	          }, onKeyDown: this.handleKeyDown, className: 'site-nav__item' },
 	        itemChild
 	      );
 	    }
@@ -1628,15 +1782,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this.state = {};
 	    _this.setSliderElement = _this.setSliderElement.bind(_this);
-	    _this.drawSlider = _this.drawSlider.bind(_this);
+	    _this.handleClick = _this.handleClick.bind(_this);
+	    _this.handleCloseEvent = props.handleCloseEvent;
+	    _this.handleBlurEvent = _this.handleBlurEvent.bind(_this);
 	    return _this;
 	  }
+
+	  /**
+	   * Method to be called to focus the element
+	   * Expected to called by parent and it ensures that
+	   * it is focused by focusing the title element
+	   */
+
 
 	  _createClass(DropdownSlider, [{
 	    key: 'focus',
 	    value: function focus() {
 	      this.titleElement.focus();
 	    }
+
+	    /**
+	     * Gets the height of the element
+	     * @returns {number}
+	     */
+
 	  }, {
 	    key: 'getHeight',
 	    value: function getHeight() {
@@ -1645,6 +1814,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // of scroll
 	      return this.sliderElement ? this.sliderElement.scrollHeight : 0;
 	    }
+
+	    /**
+	     * Sets the slider element on mount and ensures
+	     * that the height is pre-calculated
+	     *
+	     * @param sliderElement
+	     */
+
 	  }, {
 	    key: 'setSliderElement',
 	    value: function setSliderElement(sliderElement) {
@@ -1652,8 +1829,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState({ 'fullHeight': this.getHeight() });
 	    }
 	  }, {
-	    key: 'drawSlider',
-	    value: function drawSlider() {
+	    key: 'handleBlurEvent',
+	    value: function handleBlurEvent(blurEvent) {
+	      var _this2 = this;
+
+	      // Ignore event if child is not displayed
+	      if (this.state.displayChild === false) {
+	        return;
+	      }
+	      var currentTarget = blurEvent.currentTarget;
+	      setTimeout(function () {
+	        // Fire the
+	        if (!currentTarget.contains(document.activeElement)) {
+	          _this2.handleCloseEvent(false);
+	        }
+	      }, 0);
+	    }
+
+	    /**
+	     * Calls method to handle event to draw slider
+	     *
+	     * Passes to parent for handling the click event
+	     */
+
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick() {
 	      if (this.props.handleClick) {
 	        this.props.handleClick();
 	      }
@@ -1669,7 +1870,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var draw = this.props.draw;
 
@@ -1679,15 +1880,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      var childElement = _react2.default.Children.only(this.props.children);
-	      childElement = _react2.default.cloneElement(childElement, { childFocus: this.props.focusChild });
+	      childElement = _react2.default.cloneElement(childElement, { childFocus: this.props.focusChild, handleCloseEvent: this.handleCloseEvent });
 
 	      return _react2.default.createElement(
 	        'div',
-	        { role: 'button', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw, 'aria-haspopup': 'true', onClick: this.drawSlider, className: 'dropdown-slider ' + drawnClass },
+	        { onBlur: this.handleBlurEvent, role: 'button', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw, 'aria-haspopup': 'true', onClick: this.handleClick, className: 'dropdown-slider ' + drawnClass },
 	        _react2.default.createElement(
 	          'a',
 	          { className: 'dropdown-slider__title', ref: function ref(_ref) {
-	              return _this2.titleElement = _ref;
+	              return _this3.titleElement = _ref;
 	            }, tabIndex: '0' },
 	          this.props.title,
 	          _react2.default.createElement('span', { className: 'dropdown-slider--caret' })
@@ -1708,6 +1909,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  title: _react2.default.PropTypes.string,
 	  children: _react2.default.PropTypes.element.isRequired,
 	  handleClick: _react2.default.PropTypes.func,
+	  handleCloseEvent: _react2.default.PropTypes.func,
 	  focusChild: _react2.default.PropTypes.bool,
 	  draw: _react2.default.PropTypes.bool
 	};
