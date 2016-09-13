@@ -13,6 +13,9 @@ class NavigationList extends React.Component {
     super(props);
     this.state = {activeIndex: -1};
     this.handleKeyEvent = this.handleKeyEvent.bind(this);
+    this.handleFocusChangeEvent = this.handleFocusChangeEvent.bind(this);
+    // A simple element which is used for keeping track of which element in list is active
+    this.activeElementSyncIndex = -1;
   }
 
   handleKeyEvent(keyEvent, index) {
@@ -27,15 +30,13 @@ class NavigationList extends React.Component {
    *
    * @param listHelper
    * @param keyEvent
-   * @param index
    * @returns {boolean}
    */
-  handleKeyNavigation(listHelper, keyEvent, index) {
+  handleKeyNavigation(listHelper, keyEvent) {
     const keyCode = keyEvent.which;
-
     let handledEvent = false;
     if (listHelper.canHandleEvent(keyCode)) {
-      const newActiveIndex = index + listHelper.getChange(keyCode);
+      const newActiveIndex = this.activeElementSyncIndex + listHelper.getChange(keyCode);
       if (newActiveIndex >= -1 && newActiveIndex < this.props.children.length) {
         this.setState({
           activeIndex: newActiveIndex
@@ -53,20 +54,43 @@ class NavigationList extends React.Component {
     return handledEvent;
   }
 
-  componentWillReceiveProps (nextProps) {
-    // If menu is being closed Add the current fullHeight to state
-    if(nextProps.childFocus === true)  {
-      this.setState({
-        activeIndex: 0
-      });
+  /**
+   *
+   * @param activeChildIndex
+   */
+  updateActiveChild(activeChildIndex) {
+    this.setState({
+      activeIndex: activeChildIndex
+    })
+  }
+
+  handleFocusChangeEvent(isFocused, index) {
+    if(isFocused) {
+      this.activeElementSyncIndex = index;
+    } else {
+      this.activeElementSyncIndex = -1;
     }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.reset === true) {
+      this.updateActiveChild(-1);
+    }
+  }
+
+  componentDidUpdate() {
+    const listHelper = getListHelper(this.props.isMainMenu);
+    if(listHelper.nextKey === this.props.parentKeyCode && this.state.activeIndex === -1) {
+      this.updateActiveChild(0);
+    }
+  }
+
 
   render() {
     const {isMainMenu, children, windowWidth, windowHeight, mode, headerHeight} = this.props;
     const listHelper = getListHelper(isMainMenu);
     const activeIndex = this.state.activeIndex;
-    const childProps = {windowWidth, windowHeight, activeIndex, mode, headerHeight, onKeyEvent: this.handleKeyEvent};
+    const childProps = {windowWidth, windowHeight, activeIndex, mode, headerHeight, onKeyEvent: this.handleKeyEvent, onFocusChange: this.handleFocusChangeEvent};
     return (
       <ul className={`site-nav__list ${listHelper.className}`}>
         {ReactHelper.addPropsToChildren(children, childProps, true)}
@@ -81,6 +105,7 @@ NavigationList.propTypes = {
   windowWidth: React.PropTypes.number,
   windowHeight: React.PropTypes.number,
   headerHeight: React.PropTypes.number,
+  parentKeyCode: React.PropTypes.number,
   handleCloseEvent: React.PropTypes.func,
   mode: React.PropTypes.oneOf(['desktop', 'mobile'])
 };

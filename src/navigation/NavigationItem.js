@@ -36,7 +36,7 @@ class NavigationItem extends React.Component {
 
   /**
    * Handles keydown press for navigation, opening menus etc
-   * @param keyEvent
+    * @param keyEvent
    */
   handleKeyDown(keyEvent) {
     if (!this.isCurrentLevelEvent(keyEvent)) {
@@ -52,16 +52,16 @@ class NavigationItem extends React.Component {
     }
   }
 
+  /**
+   * Handle keys related to the slider elements
+   *
+   * @param keyEvent
+   */
   handleSliderKeyEvents(keyEvent) {
     const keyCode = keyEvent.which;
     if(this.subMenuElement && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
       const displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
-      const state = {
-        displayChild: displayChild,
-        focusChild: displayChild
-      };
-
-      this.setState(state);
+      this.handleChildDisplay(displayChild, keyCode);
       keyEvent.preventDefault();
     }
   }
@@ -69,18 +69,16 @@ class NavigationItem extends React.Component {
   /**
    * Handles changes in child display
    *
-   * Also, if display is disabled, 
+   * Also, if display is disabled,
    *
    * @param displayChild
+   * @param parentKeyCode
    */
-  handleChildDisplay(displayChild) {
+  handleChildDisplay(displayChild, parentKeyCode) {
     const state = {
-      displayChild: displayChild
+      displayChild: displayChild,
+      parentKeyCode: parentKeyCode || -1
     };
-    if(displayChild === false) {
-      state['focusChild'] = false;
-    }
-
     this.setState(state)
   }
 
@@ -113,20 +111,30 @@ class NavigationItem extends React.Component {
                              title={props.text}>{children}</VerticalSlider>;
     } else {
       return (<DropdownSlider handleClick={this.dropdownClicked}
-                              focusChild={this.state.focusChild}
                               handleCloseEvent={this.handleCloseEvent}
                               draw={this.state.displayChild}
+                              parentKeyCode={this.state.parentKeyCode}
                               ref={(ref) => this.subMenuElement = ref}
                               title={props.text}>{children}</DropdownSlider>);
     }
   }
 
+  handleBlur() {
+    this.props.onFocusChange(false, this.props.index);
+  }
+
+  handleFocus() {
+    this.props.onFocusChange(true, this.props.index);
+  }
+
   /**
-   * One component update is the item is active item, just focus it
+   * On component update if the item is active item, just focus it
+   *
+   * Also ensure that we don't take focus from it's child if they are active
    */
   componentDidUpdate() {
-    // not make this nav item focused if child is supposed to be focused
-    if(this.props.activeIndex === this.props.index && !this.state.focusChild) {
+    // not make this nav item focused if child is supposed to be displayed
+    if(this.props.activeIndex === this.props.index && !this.state.displayChild) {
       if(this.linkElement) {
         this.linkElement.focus();
       }
@@ -147,7 +155,9 @@ class NavigationItem extends React.Component {
     const navigationLink = <a ref={(ref) => this.linkElement = ref} className={`site-nav__item-link`} href={link}>{text}</a>;
     const itemChild = children ? this.getSubMenuElement(children, this.props) : navigationLink;
     return (
-      <li ref={(ref) => this.container = ref}  onKeyDown={this.handleKeyDown} className={`site-nav__item`}>
+      <li onFocus={() => this.props.onFocusChange(true, this.props.index)}
+          onBlur={() => this.props.onFocusChange(false, this.props.index)}
+          ref={(ref) => this.container = ref}  onKeyDown={this.handleKeyDown} className={`site-nav__item`}>
         {itemChild}
       </li>
     );
@@ -158,6 +168,7 @@ class NavigationItem extends React.Component {
 NavigationItem.propTypes = {
   children: React.PropTypes.element,
   onKeyEvent: React.PropTypes.func,
+  onFocusChange: React.PropTypes.func,
   index: React.PropTypes.number,
   activeIndex: React.PropTypes.number,
   link: React.PropTypes.string,

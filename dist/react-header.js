@@ -401,6 +401,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this.state = { activeIndex: -1 };
 	    _this.handleKeyEvent = _this.handleKeyEvent.bind(_this);
+	    _this.handleFocusChangeEvent = _this.handleFocusChangeEvent.bind(_this);
+	    // A simple element which is used for keeping track of which element in list is active
+	    _this.activeElementSyncIndex = -1;
 	    return _this;
 	  }
 
@@ -418,18 +421,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @param listHelper
 	     * @param keyEvent
-	     * @param index
 	     * @returns {boolean}
 	     */
 
 	  }, {
 	    key: 'handleKeyNavigation',
-	    value: function handleKeyNavigation(listHelper, keyEvent, index) {
+	    value: function handleKeyNavigation(listHelper, keyEvent) {
 	      var keyCode = keyEvent.which;
-
 	      var handledEvent = false;
 	      if (listHelper.canHandleEvent(keyCode)) {
-	        var newActiveIndex = index + listHelper.getChange(keyCode);
+	        var newActiveIndex = this.activeElementSyncIndex + listHelper.getChange(keyCode);
 	        if (newActiveIndex >= -1 && newActiveIndex < this.props.children.length) {
 	          this.setState({
 	            activeIndex: newActiveIndex
@@ -446,14 +447,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return handledEvent;
 	    }
+
+	    /**
+	     *
+	     * @param activeChildIndex
+	     */
+
+	  }, {
+	    key: 'updateActiveChild',
+	    value: function updateActiveChild(activeChildIndex) {
+	      this.setState({
+	        activeIndex: activeChildIndex
+	      });
+	    }
+	  }, {
+	    key: 'handleFocusChangeEvent',
+	    value: function handleFocusChangeEvent(isFocused, index) {
+	      if (isFocused) {
+	        this.activeElementSyncIndex = index;
+	      } else {
+	        this.activeElementSyncIndex = -1;
+	      }
+	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
-	      // If menu is being closed Add the current fullHeight to state
-	      if (nextProps.childFocus === true) {
-	        this.setState({
-	          activeIndex: 0
-	        });
+	      if (nextProps.reset === true) {
+	        this.updateActiveChild(-1);
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      var listHelper = (0, _NavigationListHelper.getListHelper)(this.props.isMainMenu);
+	      if (listHelper.nextKey === this.props.parentKeyCode && this.state.activeIndex === -1) {
+	        this.updateActiveChild(0);
 	      }
 	    }
 	  }, {
@@ -469,7 +497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var listHelper = (0, _NavigationListHelper.getListHelper)(isMainMenu);
 	      var activeIndex = this.state.activeIndex;
-	      var childProps = { windowWidth: windowWidth, windowHeight: windowHeight, activeIndex: activeIndex, mode: mode, headerHeight: headerHeight, onKeyEvent: this.handleKeyEvent };
+	      var childProps = { windowWidth: windowWidth, windowHeight: windowHeight, activeIndex: activeIndex, mode: mode, headerHeight: headerHeight, onKeyEvent: this.handleKeyEvent, onFocusChange: this.handleFocusChangeEvent };
 	      return _react2.default.createElement(
 	        'ul',
 	        { className: 'site-nav__list ' + listHelper.className },
@@ -487,6 +515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  windowWidth: _react2.default.PropTypes.number,
 	  windowHeight: _react2.default.PropTypes.number,
 	  headerHeight: _react2.default.PropTypes.number,
+	  parentKeyCode: _react2.default.PropTypes.number,
 	  handleCloseEvent: _react2.default.PropTypes.func,
 	  mode: _react2.default.PropTypes.oneOf(['desktop', 'mobile'])
 	};
@@ -682,7 +711,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    DOWN: 40,
 	    ESCAPE: 27,
 	    ENTER: 13,
-	    SPACE: 32
+	    SPACE: 32,
+	    TAB: 9
 	  }
 	};
 
@@ -1568,7 +1598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Handles keydown press for navigation, opening menus etc
-	     * @param keyEvent
+	      * @param keyEvent
 	     */
 
 	  }, {
@@ -1586,18 +1616,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.handleSliderKeyEvents(keyEvent);
 	      }
 	    }
+
+	    /**
+	     * Handle keys related to the slider elements
+	     *
+	     * @param keyEvent
+	     */
+
 	  }, {
 	    key: 'handleSliderKeyEvents',
 	    value: function handleSliderKeyEvents(keyEvent) {
 	      var keyCode = keyEvent.which;
 	      if (this.subMenuElement && ALL_KEY_EVENTS.indexOf(keyCode) > -1) {
 	        var displayChild = OPEN_KEY_EVENTS.indexOf(keyCode) > -1;
-	        var state = {
-	          displayChild: displayChild,
-	          focusChild: displayChild
-	        };
-
-	        this.setState(state);
+	        this.handleChildDisplay(displayChild, keyCode);
 	        keyEvent.preventDefault();
 	      }
 	    }
@@ -1605,21 +1637,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Handles changes in child display
 	     *
-	     * Also, if display is disabled, 
+	     * Also, if display is disabled,
 	     *
 	     * @param displayChild
+	     * @param parentKeyCode
 	     */
 
 	  }, {
 	    key: 'handleChildDisplay',
-	    value: function handleChildDisplay(displayChild) {
+	    value: function handleChildDisplay(displayChild, parentKeyCode) {
 	      var state = {
-	        displayChild: displayChild
+	        displayChild: displayChild,
+	        parentKeyCode: parentKeyCode || -1
 	      };
-	      if (displayChild === false) {
-	        state['focusChild'] = false;
-	      }
-
 	      this.setState(state);
 	    }
 
@@ -1667,9 +1697,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _react2.default.createElement(
 	          _DropdownSlider2.default,
 	          { handleClick: this.dropdownClicked,
-	            focusChild: this.state.focusChild,
 	            handleCloseEvent: this.handleCloseEvent,
 	            draw: this.state.displayChild,
+	            parentKeyCode: this.state.parentKeyCode,
 	            ref: function ref(_ref) {
 	              return _this2.subMenuElement = _ref;
 	            },
@@ -1678,16 +1708,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        );
 	      }
 	    }
+	  }, {
+	    key: 'handleBlur',
+	    value: function handleBlur() {
+	      this.props.onFocusChange(false, this.props.index);
+	    }
+	  }, {
+	    key: 'handleFocus',
+	    value: function handleFocus() {
+	      this.props.onFocusChange(true, this.props.index);
+	    }
 
 	    /**
-	     * One component update is the item is active item, just focus it
+	     * On component update if the item is active item, just focus it
+	     *
+	     * Also ensure that we don't take focus from it's child if they are active
 	     */
 
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      // not make this nav item focused if child is supposed to be focused
-	      if (this.props.activeIndex === this.props.index && !this.state.focusChild) {
+	      // not make this nav item focused if child is supposed to be displayed
+	      if (this.props.activeIndex === this.props.index && !this.state.displayChild) {
 	        if (this.linkElement) {
 	          this.linkElement.focus();
 	        }
@@ -1722,7 +1764,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var itemChild = children ? this.getSubMenuElement(children, this.props) : navigationLink;
 	      return _react2.default.createElement(
 	        'li',
-	        { ref: function ref(_ref3) {
+	        { onFocus: function onFocus() {
+	            return _this3.props.onFocusChange(true, _this3.props.index);
+	          },
+	          onBlur: function onBlur() {
+	            return _this3.props.onFocusChange(false, _this3.props.index);
+	          },
+	          ref: function ref(_ref3) {
 	            return _this3.container = _ref3;
 	          }, onKeyDown: this.handleKeyDown, className: 'site-nav__item' },
 	        itemChild
@@ -1736,6 +1784,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	NavigationItem.propTypes = {
 	  children: _react2.default.PropTypes.element,
 	  onKeyEvent: _react2.default.PropTypes.func,
+	  onFocusChange: _react2.default.PropTypes.func,
 	  index: _react2.default.PropTypes.number,
 	  activeIndex: _react2.default.PropTypes.number,
 	  link: _react2.default.PropTypes.string,
@@ -1834,14 +1883,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      // Ignore event if child is not displayed
-	      if (this.state.displayChild === false) {
+	      if (this.props.draw === false) {
 	        return;
 	      }
+	      // While blur is not normally bubbled, it will bubble
+	      // in this case due to react's event system.
+	      // We need to have async flow as initially the active document
+	      // is the body, after which it becomes the current eleemnt
 	      var currentTarget = blurEvent.currentTarget;
 	      setTimeout(function () {
-	        // Fire the
-	        if (!currentTarget.contains(document.activeElement)) {
-	          _this2.handleCloseEvent(false);
+	        if (currentTarget.contains && !currentTarget.contains(document.activeElement)) {
+	          _this2.props.handleCloseEvent(false);
 	        }
 	      }, 0);
 	    }
@@ -1880,11 +1932,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      var childElement = _react2.default.Children.only(this.props.children);
-	      childElement = _react2.default.cloneElement(childElement, { childFocus: this.props.focusChild, handleCloseEvent: this.handleCloseEvent });
+	      childElement = _react2.default.cloneElement(childElement, { handleCloseEvent: this.handleCloseEvent,
+	        parentKeyCode: this.props.parentKeyCode,
+	        reset: draw });
 
 	      return _react2.default.createElement(
 	        'div',
-	        { onBlur: this.handleBlurEvent, role: 'button', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw, 'aria-haspopup': 'true', onClick: this.handleClick, className: 'dropdown-slider ' + drawnClass },
+	        { onBlur: this.handleBlurEvent, role: 'button', 'aria-pressed': '' + draw, 'aria-expanded': '' + draw,
+	          'aria-haspopup': 'true', onClick: this.handleClick, className: 'dropdown-slider ' + drawnClass },
 	        _react2.default.createElement(
 	          'a',
 	          { className: 'dropdown-slider__title', ref: function ref(_ref) {
@@ -1907,10 +1962,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	DropdownSlider.propTypes = {
 	  title: _react2.default.PropTypes.string,
+	  parentKeyCode: _react2.default.PropTypes.number,
 	  children: _react2.default.PropTypes.element.isRequired,
 	  handleClick: _react2.default.PropTypes.func,
 	  handleCloseEvent: _react2.default.PropTypes.func,
-	  focusChild: _react2.default.PropTypes.bool,
 	  draw: _react2.default.PropTypes.bool
 	};
 

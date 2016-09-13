@@ -9,6 +9,7 @@ export default {
     DOWN: 40,
     ESCAPE: 27,
     ENTER: 13,
-    SPACE: 32
+    SPACE: 32,
+    TAB: 9
   }
 }

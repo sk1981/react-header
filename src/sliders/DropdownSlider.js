@@ -47,14 +47,17 @@ class DropdownSlider extends React.Component {
 
   handleBlurEvent(blurEvent) {
     // Ignore event if child is not displayed
-    if(this.state.displayChild === false) {
+    if(this.props.draw === false) {
       return;
     }
+    // While blur is not normally bubbled, it will bubble
+    // in this case due to react's event system.
+    // We need to have async flow as initially the active document
+    // is the body, after which it becomes the current eleemnt
     const currentTarget = blurEvent.currentTarget;
     setTimeout(() => {
-      // Fire the
-      if (!currentTarget.contains(document.activeElement)) {
-        this.handleCloseEvent(false);
+      if (currentTarget.contains && !currentTarget.contains(document.activeElement)) {
+        this.props.handleCloseEvent(false);
       }
     }, 0);
   }
@@ -85,10 +88,13 @@ class DropdownSlider extends React.Component {
     };
 
     let childElement = React.Children.only(this.props.children);
-    childElement = React.cloneElement(childElement, {childFocus: this.props.focusChild, handleCloseEvent: this.handleCloseEvent});
+    childElement = React.cloneElement(childElement, { handleCloseEvent: this.handleCloseEvent,
+                                                      parentKeyCode: this.props.parentKeyCode,
+                                                      reset: draw });
 
     return (
-      <div onBlur={this.handleBlurEvent} role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`} aria-haspopup="true" onClick={this.handleClick} className={`dropdown-slider ${drawnClass}`}>
+      <div onBlur={this.handleBlurEvent} role="button" aria-pressed={`${draw}`} aria-expanded={`${draw}`}
+           aria-haspopup="true" onClick={this.handleClick} className={`dropdown-slider ${drawnClass}`}>
         <a className="dropdown-slider__title" ref={(ref) => this.titleElement = ref} tabIndex="0">
           {this.props.title}
           <span className="dropdown-slider--caret"/>
@@ -102,10 +108,10 @@ class DropdownSlider extends React.Component {
 
 DropdownSlider.propTypes = {
   title: React.PropTypes.string,
+  parentKeyCode: React.PropTypes.number,
   children: React.PropTypes.element.isRequired,
   handleClick: React.PropTypes.func,
   handleCloseEvent: React.PropTypes.func,
-  focusChild: React.PropTypes.bool,
   draw: React.PropTypes.bool
 };
 
