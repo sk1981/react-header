@@ -17,7 +17,7 @@ const header = (
         </NavigationList>
       </NavigationItem>
       <NavigationItem link="#dummy" text="Dummy"/>
-      <NavigationItem link="/react-header/docs" text="Documentation"/>
+      <NavigationItem link=".." text="Documentation"/>
     </NavigationList>
   </StickyOnScrollUpHeader>
 );

@@ -185,7 +185,8 @@ a {
 .site-nav__item-link {
   padding: 10px 25px;
   display: inline-block;
-  margin-left: 5px; }
+  margin-left: 5px;
+  width: 100%; }
 
 .vertical-slider__back,
 .dropdown-slider__title,

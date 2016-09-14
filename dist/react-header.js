@@ -94,6 +94,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/**
+	 * Export all the required files
+	 */
 	exports.Logo = _Logo2.default;
 	exports.NavigationList = _NavigationList2.default;
 	exports.NavigationItem = _NavigationItem2.default;
@@ -863,9 +866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      // Only register for the main slider to avoid extra events
-	      if (!this.props.isSubSlider) {
-	        document.addEventListener("click", this.handleDocumentClickEvent);
-	      }
+	      document.addEventListener("click", this.handleDocumentClickEvent);
 	    }
 
 	    /**
@@ -875,9 +876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      if (!this.props.isSubSlider) {
-	        document.removeEventListener("click", this.handleDocumentClickEvent);
-	      }
+	      document.removeEventListener("click", this.handleDocumentClickEvent);
 	    }
 
 	    /**
@@ -935,8 +934,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var drawnClass = isDrawn ? 'vertical-slider--drawn' : '';
 	      var sliderLevelClass = isSubSlider ? 'vertical-slider--sub' : 'vertical-slider--main';
-	      //TODO : Make props
-	      var width = Math.floor(windowWidth * 3 / 4);
+	      // Get slider width which is a particular fraction of window width upto a given max width
+	      var width = Math.min(Math.floor(windowWidth * this.props.sliderWidthFraction), this.props.sliderWidthMax);
 	      var childStyles = {
 	        transform: 'translateX(' + (isDrawn ? '0' : '-' + width + 'px') + ')',
 	        height: windowHeight - headerHeight + 'px',
@@ -945,7 +944,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        left: 0,
 	        position: isSubSlider ? 'absolute' : 'fixed'
 	      };
-
 	      return _react2.default.createElement(
 	        'div',
 	        { ref: function ref(_ref) {
@@ -973,7 +971,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  windowWidth: _react2.default.PropTypes.number,
 	  windowHeight: _react2.default.PropTypes.number,
 	  headerHeight: _react2.default.PropTypes.number,
+	  /**
+	   * Width of the Vertical slider as a fraction of window width
+	   */
+	  sliderWidthFraction: _react2.default.PropTypes.number,
+	  /**
+	   * Max width of the slider
+	   */
+	  sliderWidthMax: _react2.default.PropTypes.number,
 	  isSubSlider: _react2.default.PropTypes.bool
+	};
+
+	VerticalSlider.defaultProps = {
+	  sliderWidthFraction: 0.75,
+	  sliderWidthMax: 400
 	};
 
 	exports.default = VerticalSlider;

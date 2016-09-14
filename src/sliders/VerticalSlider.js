@@ -95,18 +95,14 @@ class VerticalSlider extends React.Component {
    */
   componentDidMount() {
     // Only register for the main slider to avoid extra events
-    if(!this.props.isSubSlider) {
-      document.addEventListener("click", this.handleDocumentClickEvent)
-    }
+    document.addEventListener("click", this.handleDocumentClickEvent)
   }
 
   /**
    * Used for registering clicks on document body
    */
   componentWillUnmount() {
-    if(!this.props.isSubSlider) {
-      document.removeEventListener("click", this.handleDocumentClickEvent)
-    }
+    document.removeEventListener("click", this.handleDocumentClickEvent)
   }
 
   /**
@@ -147,8 +143,8 @@ class VerticalSlider extends React.Component {
     const {isSubSlider, headerHeight, windowWidth, windowHeight} = this.props;
     const drawnClass = isDrawn ? 'vertical-slider--drawn' : '';
     const sliderLevelClass = isSubSlider ? 'vertical-slider--sub': 'vertical-slider--main';
-    //TODO : Make props
-    const width = Math.floor(windowWidth * 3/4);
+    // Get slider width which is a particular fraction of window width upto a given max width
+    const width = Math.min(Math.floor(windowWidth * this.props.sliderWidthFraction), this.props.sliderWidthMax);
     const childStyles = {
       transform: `translateX(${isDrawn ? '0' : `-${width}px`})`,
       height: `${windowHeight - headerHeight}px`,
@@ -157,7 +153,6 @@ class VerticalSlider extends React.Component {
       left: 0,
       position: isSubSlider ? 'absolute' : 'fixed'
     };
-
     return (
       <div ref={(ref)=> this.sliderElement = ref}
            className={`vertical-slider ${drawnClass} ${sliderLevelClass}`}>
@@ -181,7 +176,20 @@ VerticalSlider.propTypes = {
   windowWidth: React.PropTypes.number,
   windowHeight: React.PropTypes.number,
   headerHeight: React.PropTypes.number,
+  /**
+   * Width of the Vertical slider as a fraction of window width
+   */
+  sliderWidthFraction: React.PropTypes.number,
+  /**
+   * Max width of the slider
+   */
+  sliderWidthMax: React.PropTypes.number,
   isSubSlider: React.PropTypes.bool
+};
+
+VerticalSlider.defaultProps = {
+  sliderWidthFraction: 0.75,
+  sliderWidthMax: 400
 };
 
 export default VerticalSlider;

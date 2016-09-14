@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      )
 	    ),
 	    _react2.default.createElement(NavigationItem, { link: '#dummy', text: 'Dummy' }),
-	    _react2.default.createElement(NavigationItem, { link: '/react-header/docs', text: 'Documentation' })
+	    _react2.default.createElement(NavigationItem, { link: '..', text: 'Documentation' })
 	  )
 	);
 

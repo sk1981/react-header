@@ -5,6 +5,9 @@ import Logo from './Logo.js';
 import NavigationList from './navigation/NavigationList';
 import NavigationItem from './navigation/NavigationItem';
 
+/**
+ * Export all the required files
+ */
 export {
   Logo,
   NavigationList,

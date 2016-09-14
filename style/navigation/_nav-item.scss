@@ -15,6 +15,7 @@
   display: inline-block;
   // Add minimal margin so that hover outline is fully visible on left side
   margin-left: 5px;
+  width: 100%; // so that full link is clickable
 }
 
 // Ensure that dropdown title also follows the above padding details
