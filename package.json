@@ -4,7 +4,10 @@
   "description": "A responsive header built in react",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/karma/bin/karma start --single-run"
+    "test": "node ./node_modules/karma/bin/karma start --single-run",
+    "build": "node ./node_modules/webpack/bin/webpack.js --config=webpack-config.prod.js",
+    "examples": "npm run build && cd docs && node ../node_modules/webpack/bin/webpack.js --config=webpack-config.example.js",
+    "watch": "webpack-dev-server --config=webpack-config.test.js --hot inline"
   },
   "keywords": [
     "react",
