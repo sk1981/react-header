@@ -29,10 +29,10 @@ function organizeDesktopChildren(children) {
  * @returns {XML}
  * @constructor
  */
-const DesktopHeader = (props) => {
+const DesktopHeader = ({children}) => {
   return (
     <div>
-      {organizeDesktopChildren(props.children)}
+      {organizeDesktopChildren(children)}
     </div>
   );
 };

@@ -35,14 +35,14 @@ function getTitleComponent(childArray) {
 /**
  * Header element for smaller screens, usually found on mobile devices
  */
-const MobileHeader = (props) => {
-  const childArray = React.Children.toArray(props.children);
+const MobileHeader = ({children, windowWidth, windowHeight, headerHeight, mode}) => {
+  const childArray = React.Children.toArray(children);
   const titleComponent = getTitleComponent(childArray);
   const sizeProps = {
-    windowWidth: props.windowWidth,
-    windowHeight: props.windowHeight,
-    headerHeight: props.headerHeight,
-    mode: props.mode
+    windowWidth,
+    windowHeight,
+    headerHeight,
+    mode
   };
   const childComponents = getChildComponents(childArray, sizeProps);
   return (
